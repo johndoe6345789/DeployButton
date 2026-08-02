@@ -1,5 +1,6 @@
 [requires]
 drogon/1.9.7
+libcurl/8.11.1
 
 [generators]
 CMakeDeps
