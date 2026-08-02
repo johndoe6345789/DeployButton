@@ -8,5 +8,5 @@ CMakeToolchain
 
 [options]
 drogon/*:with_orm=True
-drogon/*:sqlite3=True
+drogon/*:with_sqlite=True
 drogon/*:with_boost=False
