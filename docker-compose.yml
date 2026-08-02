@@ -1,0 +1,33 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    volumes:
+      - backend-data:/app/data
+      # The workflow engine's steps (git_pull, npm_install/build, docker_build)
+      # shell out inside this container using the `cwd` you set per step, e.g.
+      # /srv/repos/my-app. Point this at wherever your app repos actually live
+      # on the host so those paths resolve; adjust the left-hand side to match.
+      - /srv/repos:/srv/repos
+      # Lets the docker_build step (and CapRover's own webhook, which builds
+      # on the host) talk to the host's Docker daemon from inside this container.
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    restart: unless-stopped
+
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+      - frontend
+    restart: unless-stopped
+
+volumes:
+  backend-data:
