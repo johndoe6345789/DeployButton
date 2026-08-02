@@ -9,6 +9,3 @@ CMakeToolchain
 drogon/*:with_orm=True
 drogon/*:sqlite3=True
 drogon/*:with_boost=False
-
-[layout]
-cmake_layout
