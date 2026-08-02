@@ -1,0 +1,26 @@
+{
+  "listeners": [
+    {
+      "address": "0.0.0.0",
+      "port": 8080,
+      "https": false
+    }
+  ],
+  "db_clients": [
+    {
+      "rdbms": "sqlite3",
+      "filename": "./data/deploybutton.db",
+      "is_fast": false,
+      "client_name": "default",
+      "connection_number": 1
+    }
+  ],
+  "app": {
+    "threads_num": 2,
+    "enable_session": false,
+    "log": {
+      "log_path": "",
+      "log_level": "INFO"
+    }
+  }
+}

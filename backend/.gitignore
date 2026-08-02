@@ -1,0 +1,5 @@
+build/
+build-local/
+data/*.db
+data/*.db-journal
+CMakeUserPresets.json
