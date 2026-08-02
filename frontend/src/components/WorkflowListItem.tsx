@@ -11,12 +11,12 @@ export default function WorkflowListItem({
   onDelete: () => void;
 }) {
   return (
-    <div className="flex items-center justify-between rounded-lg border border-black/10 p-4 dark:border-white/10">
-      <div>
-        <div className="flex items-center gap-2">
+    <div className="flex flex-col gap-2 rounded-lg border border-black/10 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-white/10">
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center gap-2">
           <Link
             href={`/workflows/${workflow.id}`}
-            className="font-semibold hover:underline"
+            className="truncate font-semibold hover:underline"
           >
             {workflow.name}
           </Link>
@@ -34,7 +34,7 @@ export default function WorkflowListItem({
       </div>
       <button
         onClick={onDelete}
-        className="text-xs text-red-600 hover:underline"
+        className="self-start text-xs text-red-600 hover:underline sm:self-auto"
       >
         Delete
       </button>

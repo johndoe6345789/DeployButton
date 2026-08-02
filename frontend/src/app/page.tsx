@@ -11,7 +11,7 @@ export default function Dashboard() {
   const [showNewProject, setShowNewProject] = useState(false);
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-10">
+    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
       <DashboardHeader onNewProject={() => setShowNewProject(true)} />
 
       {loading && <p className="text-sm text-gray-500">Loading...</p>}

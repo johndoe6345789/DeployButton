@@ -12,7 +12,7 @@ export default function RunDetailPage() {
   const { run, error } = useRunPolling(runId);
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-10">
+    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
       <Link
         href={run ? `/projects/${run.project_id}/runs` : "/"}
         className="text-sm text-indigo-600 hover:underline"

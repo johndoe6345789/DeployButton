@@ -8,7 +8,7 @@ export default function DashboardHeader({
   onNewProject: () => void;
 }) {
   return (
-    <div className="mb-6 flex items-center justify-between">
+    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <h1 className="text-2xl font-bold">DeployButton</h1>
         <p className="text-sm text-gray-500 dark:text-gray-400">

@@ -24,14 +24,14 @@ export default function WorkflowEditor() {
 
   if (editor.loading) {
     return (
-      <div className="mx-auto max-w-3xl px-6 py-10 text-sm text-gray-500">
+      <div className="mx-auto max-w-3xl px-4 py-10 text-sm text-gray-500 sm:px-6">
         Loading...
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-10">
+    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
       <Link
         href="/workflows"
         className="text-sm text-indigo-600 hover:underline"

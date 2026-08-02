@@ -26,7 +26,11 @@ export default function StepsList({
   onChangeStep: (key: string, updated: EditableStep) => void;
   onRemoveStep: (key: string) => void;
 }) {
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 },
+    }),
+  );
 
   return (
     <>

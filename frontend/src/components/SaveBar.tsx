@@ -14,7 +14,7 @@ export default function SaveBar({
   onDone: () => void;
 }) {
   return (
-    <div className="mt-6 flex items-center gap-3">
+    <div className="mt-6 flex flex-wrap items-center gap-3">
       <button
         onClick={onSave}
         disabled={saving}

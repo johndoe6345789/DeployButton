@@ -34,9 +34,9 @@ export default function AddStepMenu({
   const [type, setType] = useState<StepType>("shell");
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       <select
-        className="rounded-md border border-black/20 px-2 py-1 text-sm dark:border-white/20 dark:bg-neutral-800"
+        className="min-w-0 flex-1 rounded-md border border-black/20 px-2 py-1 text-sm sm:flex-none dark:border-white/20 dark:bg-neutral-800"
         value={type}
         onChange={(e) => setType(e.target.value as StepType)}
       >

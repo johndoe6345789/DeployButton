@@ -19,12 +19,12 @@ export default function ProjectCard({ project }: { project: Project }) {
     relativeTime(project.last_run_started_at);
 
   return (
-    <div className="flex items-center justify-between rounded-lg border border-black/10 p-4 dark:border-white/10">
-      <div>
-        <div className="flex items-center gap-2">
+    <div className="flex flex-col gap-3 rounded-lg border border-black/10 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-white/10">
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center gap-2">
           <Link
             href={`/projects/${project.id}/runs`}
-            className="font-semibold hover:underline"
+            className="truncate font-semibold hover:underline"
           >
             {project.name}
           </Link>
@@ -35,7 +35,9 @@ export default function ProjectCard({ project }: { project: Project }) {
           {lastRunTime ? ` · last run ${lastRunTime}` : ""}
         </p>
       </div>
-      <DeployButton projectId={project.id} />
+      <div className="shrink-0 self-start sm:self-auto">
+        <DeployButton projectId={project.id} />
+      </div>
     </div>
   );
 }

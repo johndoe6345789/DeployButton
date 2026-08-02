@@ -33,7 +33,7 @@ export default function WorkflowEditorHeader({
         />
       </div>
 
-      <div className="mt-6 flex items-center justify-between">
+      <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-lg font-semibold">Steps</h2>
         <AddStepMenu onAdd={onAddStep} />
       </div>

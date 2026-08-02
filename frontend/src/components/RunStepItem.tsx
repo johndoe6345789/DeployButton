@@ -6,7 +6,7 @@ import type { StepRun } from "@/types";
 export default function RunStepItem({ step }: { step: StepRun }) {
   return (
     <div className="rounded-md border border-black/10 dark:border-white/10">
-      <div className="flex items-center justify-between border-b border-black/10 px-3 py-2 dark:border-white/10">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-black/10 px-3 py-2 dark:border-white/10">
         <span className="text-sm font-medium">{step.name}</span>
         <StatusBadge status={step.status} />
       </div>

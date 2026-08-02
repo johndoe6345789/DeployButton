@@ -25,8 +25,8 @@ export default function WorkflowList() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-10">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold">Workflows</h1>
           <Link href="/" className="text-sm text-indigo-600 hover:underline">
@@ -35,7 +35,7 @@ export default function WorkflowList() {
         </div>
         <button
           onClick={handleCreate}
-          className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-500"
+          className="self-start rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-500 sm:self-auto"
         >
           New Workflow
         </button>

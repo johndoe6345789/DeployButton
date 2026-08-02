@@ -27,7 +27,7 @@ export default function RunHistory() {
   }, [projectId]);
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-10">
+    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
       <Link href="/" className="text-sm text-indigo-600 hover:underline">
         &larr; Back to dashboard
       </Link>
@@ -48,9 +48,9 @@ export default function RunHistory() {
           <Link
             key={run.id}
             href={`/runs/${run.id}`}
-            className="flex items-center justify-between rounded-md border border-black/10 p-3 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5"
+            className="flex flex-col gap-1 rounded-md border border-black/10 p-3 hover:bg-black/5 sm:flex-row sm:items-center sm:justify-between dark:border-white/10 dark:hover:bg-white/5"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <StatusBadge status={run.status} />
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 {run.trigger_type === "manual" ? "Manual" : "GitHub webhook"}
