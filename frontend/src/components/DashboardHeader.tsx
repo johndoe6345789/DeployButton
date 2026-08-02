@@ -1,42 +1,40 @@
 "use client";
 
 import Link from "next/link";
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
+import { useTranslations } from "next-intl";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import styles from "./DashboardHeader.module.scss";
 
 export default function DashboardHeader({
   onNewProject,
 }: {
   onNewProject: () => void;
 }) {
+  const t = useTranslations("dashboard");
+
   return (
-    <Stack
-      direction={{ xs: "column", sm: "row" }}
-      spacing={2}
-      sx={{
-        mb: 3,
-        alignItems: { sm: "center" },
-        justifyContent: { sm: "space-between" },
-      }}
-    >
-      <Box>
-        <Typography variant="h4" sx={{ fontWeight: 700 }}>
-          DeployButton
+    <header className={styles.header}>
+      <div>
+        <Typography variant="h4" className={styles.title}>
+          {t("title")}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          One-click deploys for your apps.
+          {t("subtitle")}
         </Typography>
-      </Box>
-      <Stack direction="row" spacing={1}>
+      </div>
+      <div className={styles.actions}>
         <Button component={Link} href="/workflows" color="inherit">
-          Workflows
+          {t("workflowsLink")}
         </Button>
-        <Button variant="contained" onClick={onNewProject}>
-          New Project
+        <Button
+          variant="contained"
+          onClick={onNewProject}
+          data-testid="new-project-button"
+        >
+          {t("newProject")}
         </Button>
-      </Stack>
-    </Stack>
+      </div>
+    </header>
   );
 }

@@ -1,27 +1,30 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { set, type FieldsProps } from "./shared";
 
 export default function ShellFields({ config, onChange }: FieldsProps) {
+  const t = useTranslations("stepFields");
+
   return (
     <Stack spacing={1.5}>
       <TextField
         size="small"
         fullWidth
-        label="Working directory"
+        label={t("workingDirectory")}
         value={config.cwd ?? ""}
         onChange={(e) => onChange(set(config, "cwd", e.target.value))}
-        placeholder="/srv/repos/my-app"
+        placeholder={t("workingDirectoryPlaceholder")}
       />
       <TextField
         size="small"
         fullWidth
-        label="Command"
+        label={t("command")}
         value={config.command ?? ""}
         onChange={(e) => onChange(set(config, "command", e.target.value))}
-        placeholder="echo hello"
+        placeholder={t("commandPlaceholder")}
       />
     </Stack>
   );

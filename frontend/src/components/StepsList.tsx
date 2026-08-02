@@ -12,10 +12,11 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import Stack from "@mui/material/Stack";
+import { useTranslations } from "next-intl";
 import Typography from "@mui/material/Typography";
 import StepCard from "./StepCard";
 import type { EditableStep } from "@/types";
+import styles from "./StepsList.module.scss";
 
 export default function StepsList({
   steps,
@@ -28,6 +29,7 @@ export default function StepsList({
   onChangeStep: (key: string, updated: EditableStep) => void;
   onRemoveStep: (key: string) => void;
 }) {
+  const t = useTranslations("workflowEditor");
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 5 },
@@ -45,7 +47,7 @@ export default function StepsList({
           items={steps.map((s) => s.key)}
           strategy={verticalListSortingStrategy}
         >
-          <Stack spacing={1} sx={{ mt: 1.5 }}>
+          <div className={styles.list} data-testid="steps-list">
             {steps.map((step) => (
               <StepCard
                 key={step.key}
@@ -54,13 +56,17 @@ export default function StepsList({
                 onRemove={() => onRemoveStep(step.key)}
               />
             ))}
-          </Stack>
+          </div>
         </SortableContext>
       </DndContext>
 
       {steps.length === 0 && (
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-          No steps yet. Add one above.
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          className={styles.empty}
+        >
+          {t("noSteps")}
         </Typography>
       )}
     </>

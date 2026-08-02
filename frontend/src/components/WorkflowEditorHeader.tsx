@@ -1,10 +1,11 @@
 "use client";
 
-import Stack from "@mui/material/Stack";
+import { useTranslations } from "next-intl";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import AddStepMenu from "./AddStepMenu";
 import type { EditableStep } from "@/types";
+import styles from "./WorkflowEditorHeader.module.scss";
 
 export default function WorkflowEditorHeader({
   name,
@@ -19,15 +20,18 @@ export default function WorkflowEditorHeader({
   onDescriptionChange: (value: string) => void;
   onAddStep: (step: EditableStep) => void;
 }) {
+  const t = useTranslations("workflowEditor");
+
   return (
     <>
-      <Stack spacing={1.5} sx={{ mt: 2 }}>
+      <div className={styles.nameDescription}>
         <TextField
           variant="standard"
+          className={styles.name}
           value={name}
           onChange={(e) => onNameChange(e.target.value)}
           slotProps={{
-            input: { sx: { fontSize: "1.5rem", fontWeight: 700 } },
+            htmlInput: { "data-testid": "workflow-name-input" },
           }}
         />
         <TextField
@@ -36,22 +40,17 @@ export default function WorkflowEditorHeader({
           rows={2}
           value={description}
           onChange={(e) => onDescriptionChange(e.target.value)}
-          placeholder="Description"
+          placeholder={t("descriptionPlaceholder")}
+          slotProps={{
+            htmlInput: { "data-testid": "workflow-description-input" },
+          }}
         />
-      </Stack>
+      </div>
 
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        spacing={1.5}
-        sx={{
-          mt: 3,
-          alignItems: { sm: "center" },
-          justifyContent: { sm: "space-between" },
-        }}
-      >
-        <Typography variant="h6">Steps</Typography>
+      <div className={styles.stepsRow}>
+        <Typography variant="h6">{t("stepsHeading")}</Typography>
         <AddStepMenu onAdd={onAddStep} />
-      </Stack>
+      </div>
     </>
   );
 }

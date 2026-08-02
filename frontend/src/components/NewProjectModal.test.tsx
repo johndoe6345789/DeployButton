@@ -1,7 +1,8 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import NewProjectModal from "./NewProjectModal";
 import { api } from "@/api/client";
+import { renderWithProviders } from "@/test-utils/renderWithProviders";
 
 jest.mock("@/api/client", () => ({
   api: { listWorkflows: jest.fn(), createProject: jest.fn() },
@@ -17,14 +18,25 @@ describe("NewProjectModal", () => {
   });
 
   it("loads workflows into the select", async () => {
-    render(<NewProjectModal onClose={jest.fn()} onCreated={jest.fn()} />);
+    renderWithProviders(
+      <NewProjectModal onClose={jest.fn()} onCreated={jest.fn()} />,
+    );
     expect(await screen.findByText("React")).toBeInTheDocument();
     expect(screen.getByText("Node")).toBeInTheDocument();
   });
 
+  it("exposes a data-testid on the form", async () => {
+    renderWithProviders(
+      <NewProjectModal onClose={jest.fn()} onCreated={jest.fn()} />,
+    );
+    expect(await screen.findByTestId("new-project-form")).toBeInTheDocument();
+  });
+
   it("calls onClose when Cancel is clicked", async () => {
     const onClose = jest.fn();
-    render(<NewProjectModal onClose={onClose} onCreated={jest.fn()} />);
+    renderWithProviders(
+      <NewProjectModal onClose={onClose} onCreated={jest.fn()} />,
+    );
     await screen.findByText("React");
     await userEvent.click(screen.getByText("Cancel"));
     expect(onClose).toHaveBeenCalledTimes(1);
@@ -35,7 +47,9 @@ describe("NewProjectModal", () => {
     (api.createProject as jest.Mock).mockResolvedValue(created);
     const onCreated = jest.fn();
 
-    render(<NewProjectModal onClose={jest.fn()} onCreated={onCreated} />);
+    renderWithProviders(
+      <NewProjectModal onClose={jest.fn()} onCreated={onCreated} />,
+    );
     await screen.findByText("React");
 
     await userEvent.type(screen.getByLabelText(/^Name$/), "New App");
@@ -58,19 +72,25 @@ describe("NewProjectModal", () => {
 
   it("shows an error message when creation fails", async () => {
     (api.createProject as jest.Mock).mockRejectedValue(new Error("nope"));
-    render(<NewProjectModal onClose={jest.fn()} onCreated={jest.fn()} />);
+    renderWithProviders(
+      <NewProjectModal onClose={jest.fn()} onCreated={jest.fn()} />,
+    );
     await screen.findByText("React");
 
     await userEvent.type(screen.getByLabelText(/^Name$/), "X");
     await userEvent.type(screen.getByLabelText(/Slug/), "x");
     await userEvent.click(screen.getByText("Create"));
 
-    expect(await screen.findByText("nope")).toBeInTheDocument();
+    expect(await screen.findByTestId("new-project-error")).toHaveTextContent(
+      "nope",
+    );
   });
 
   it("shows a load error if listWorkflows fails", async () => {
     (api.listWorkflows as jest.Mock).mockRejectedValue(new Error("down"));
-    render(<NewProjectModal onClose={jest.fn()} onCreated={jest.fn()} />);
+    renderWithProviders(
+      <NewProjectModal onClose={jest.fn()} onCreated={jest.fn()} />,
+    );
     expect(await screen.findByText("down")).toBeInTheDocument();
   });
 });

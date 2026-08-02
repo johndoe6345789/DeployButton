@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
 import type { Workflow } from "@/types";
+import styles from "./WorkflowListItem.module.scss";
 
 export default function WorkflowListItem({
   workflow,
@@ -17,55 +17,45 @@ export default function WorkflowListItem({
   workflow: Workflow;
   onDelete: () => void;
 }) {
+  const t = useTranslations("workflowsList");
+
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" data-testid="workflow-list-item">
       <CardContent>
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={1.5}
-          sx={{
-            alignItems: { sm: "center" },
-            justifyContent: { sm: "space-between" },
-          }}
-        >
-          <Box sx={{ minWidth: 0 }}>
-            <Stack
-              direction="row"
-              spacing={1}
-              sx={{ alignItems: "center", flexWrap: "wrap" }}
-            >
+        <div className={styles.row}>
+          <div className={styles.info}>
+            <div className={styles.nameRow}>
               <Typography
                 component={Link}
                 href={`/workflows/${workflow.id}`}
-                sx={{
-                  fontWeight: 600,
-                  color: "text.primary",
-                  textDecoration: "none",
-                }}
+                className={styles.name}
               >
                 {workflow.name}
               </Typography>
-              {workflow.is_template && <Chip size="small" label="Template" />}
-            </Stack>
+              {workflow.is_template && (
+                <Chip size="small" label={t("template")} />
+              )}
+            </div>
             {workflow.description && (
               <Typography
                 variant="body2"
                 color="text.secondary"
-                sx={{ mt: 0.5 }}
+                className={styles.description}
               >
                 {workflow.description}
               </Typography>
             )}
-          </Box>
+          </div>
           <Button
             size="small"
             color="error"
             onClick={onDelete}
-            sx={{ alignSelf: { xs: "flex-start", sm: "auto" } }}
+            className={styles.deleteButton}
+            data-testid="delete-workflow-button"
           >
-            Delete
+            {t("delete")}
           </Button>
-        </Stack>
+        </div>
       </CardContent>
     </Card>
   );

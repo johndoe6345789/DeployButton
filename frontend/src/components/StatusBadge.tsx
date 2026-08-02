@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import Chip from "@mui/material/Chip";
 import type { ChipProps } from "@mui/material/Chip";
 
@@ -11,15 +12,15 @@ const COLORS: Record<string, ChipProps["color"]> = {
   none: "default",
 };
 
-const LABELS: Record<string, string> = {
-  running: "Running",
-  success: "Success",
-  failed: "Failed",
-  skipped: "Skipped",
-  none: "Never run",
-};
-
 export default function StatusBadge({ status }: { status: Status }) {
+  const t = useTranslations("statusBadge");
   const key = status ?? "none";
-  return <Chip size="small" color={COLORS[key]} label={LABELS[key]} />;
+  return (
+    <Chip
+      size="small"
+      color={COLORS[key]}
+      label={t(key)}
+      data-testid="status-badge"
+    />
+  );
 }

@@ -1,11 +1,12 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SaveBar from "./SaveBar";
+import { renderWithProviders } from "@/test-utils/renderWithProviders";
 
 describe("SaveBar", () => {
   it("shows Save when not saving and calls onSave when clicked", async () => {
     const onSave = jest.fn();
-    render(
+    renderWithProviders(
       <SaveBar
         saving={false}
         saved={false}
@@ -14,12 +15,12 @@ describe("SaveBar", () => {
         onDone={jest.fn()}
       />,
     );
-    await userEvent.click(screen.getByText("Save"));
+    await userEvent.click(screen.getByTestId("save-workflow-button"));
     expect(onSave).toHaveBeenCalledTimes(1);
   });
 
   it("shows Saving... and disables the button while saving", () => {
-    render(
+    renderWithProviders(
       <SaveBar
         saving={true}
         saved={false}
@@ -28,11 +29,12 @@ describe("SaveBar", () => {
         onDone={jest.fn()}
       />,
     );
-    expect(screen.getByText("Saving...")).toBeDisabled();
+    expect(screen.getByTestId("save-workflow-button")).toBeDisabled();
+    expect(screen.getByText("Saving...")).toBeInTheDocument();
   });
 
   it("shows a saved confirmation", () => {
-    render(
+    renderWithProviders(
       <SaveBar
         saving={false}
         saved={true}
@@ -41,11 +43,11 @@ describe("SaveBar", () => {
         onDone={jest.fn()}
       />,
     );
-    expect(screen.getByText("Saved.")).toBeInTheDocument();
+    expect(screen.getByTestId("save-success")).toHaveTextContent("Saved.");
   });
 
   it("shows an error message", () => {
-    render(
+    renderWithProviders(
       <SaveBar
         saving={false}
         saved={false}
@@ -54,12 +56,14 @@ describe("SaveBar", () => {
         onDone={jest.fn()}
       />,
     );
-    expect(screen.getByText("Failed to save")).toBeInTheDocument();
+    expect(screen.getByTestId("save-error")).toHaveTextContent(
+      "Failed to save",
+    );
   });
 
   it("calls onDone when Done is clicked", async () => {
     const onDone = jest.fn();
-    render(
+    renderWithProviders(
       <SaveBar
         saving={false}
         saved={false}
@@ -68,7 +72,7 @@ describe("SaveBar", () => {
         onDone={onDone}
       />,
     );
-    await userEvent.click(screen.getByText("Done"));
+    await userEvent.click(screen.getByTestId("done-button"));
     expect(onDone).toHaveBeenCalledTimes(1);
   });
 });

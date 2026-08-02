@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
+import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 import ThemeRegistry from "@/theme/ThemeRegistry";
 import "./globals.css";
 
@@ -18,19 +21,28 @@ export const metadata: Metadata = {
   description: "One-click deploys for your apps.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
     <html
-      lang="en"
+      lang={locale}
       className={`${geistSans.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
       <body>
-        <ThemeRegistry>{children}</ThemeRegistry>
+        <InitColorSchemeScript
+          attribute="data-mui-color-scheme"
+          defaultMode="system"
+        />
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <ThemeRegistry>{children}</ThemeRegistry>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

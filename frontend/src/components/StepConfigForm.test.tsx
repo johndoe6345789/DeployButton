@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithProviders } from "@/test-utils/renderWithProviders";
 import StepConfigForm from "./StepConfigForm";
 import type { StepType } from "@/types";
 import { STEP_TYPES } from "@/types";
@@ -7,7 +8,7 @@ describe("StepConfigForm", () => {
   it.each(STEP_TYPES.map((t) => t.value))(
     "renders fields for step type %s without crashing",
     (type: StepType) => {
-      const { container } = render(
+      const { container } = renderWithProviders(
         <StepConfigForm type={type} config={{}} onChange={jest.fn()} />,
       );
       expect(container.firstChild).not.toBeNull();
@@ -15,7 +16,7 @@ describe("StepConfigForm", () => {
   );
 
   it("passes config and onChange through to the git_pull fields", () => {
-    render(
+    renderWithProviders(
       <StepConfigForm
         type="git_pull"
         config={{ cwd: "/srv/app" }}
@@ -26,7 +27,7 @@ describe("StepConfigForm", () => {
   });
 
   it("renders nothing for an unknown step type", () => {
-    const { container } = render(
+    const { container } = renderWithProviders(
       <StepConfigForm
         type={"unknown_type" as StepType}
         config={{}}

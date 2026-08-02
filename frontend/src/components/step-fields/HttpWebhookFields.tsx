@@ -1,25 +1,28 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { set, type FieldsProps } from "./shared";
 
 export default function HttpWebhookFields({ config, onChange }: FieldsProps) {
+  const t = useTranslations("stepFields");
+
   return (
     <Stack spacing={1.5}>
       <TextField
         size="small"
         fullWidth
-        label="URL"
+        label={t("url")}
         value={config.url ?? ""}
         onChange={(e) => onChange(set(config, "url", e.target.value))}
-        placeholder="https://captain.example.com/.../triggerbuild?token=..."
+        placeholder={t("urlPlaceholder")}
       />
       <TextField
         select
         size="small"
         fullWidth
-        label="Method"
+        label={t("method")}
         slotProps={{ select: { native: true } }}
         value={config.method ?? "POST"}
         onChange={(e) => onChange(set(config, "method", e.target.value))}
@@ -33,7 +36,7 @@ export default function HttpWebhookFields({ config, onChange }: FieldsProps) {
         fullWidth
         multiline
         rows={2}
-        label="Body (optional)"
+        label={t("body")}
         value={config.body ?? ""}
         onChange={(e) => onChange(set(config, "body", e.target.value))}
       />

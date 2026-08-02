@@ -1,0 +1,11 @@
+@use "../styles/mixins" as *;
+
+.wrapper {
+  @include flex-col(4px);
+  align-items: flex-end;
+}
+
+.error {
+  text-align: right;
+  max-width: 240px;
+}

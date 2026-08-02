@@ -1,31 +1,42 @@
 "use client";
 
-import Stack from "@mui/material/Stack";
+import { useTranslations } from "next-intl";
 import Button from "@mui/material/Button";
+import styles from "./ModalFooter.module.scss";
 
 export function ModalFooter({
   onCancel,
   submitting,
-  submitLabel = "Create",
-  submittingLabel = "Creating...",
+  submitLabel,
+  submittingLabel,
 }: {
   onCancel: () => void;
   submitting: boolean;
   submitLabel?: string;
   submittingLabel?: string;
 }) {
+  const t = useTranslations("common");
+
   return (
-    <Stack
-      direction="row"
-      spacing={1}
-      sx={{ justifyContent: "flex-end", mt: 1 }}
-    >
-      <Button type="button" onClick={onCancel} color="inherit">
-        Cancel
+    <div className={styles.footer}>
+      <Button
+        type="button"
+        onClick={onCancel}
+        color="inherit"
+        data-testid="modal-cancel"
+      >
+        {t("cancel")}
       </Button>
-      <Button type="submit" variant="contained" disabled={submitting}>
-        {submitting ? submittingLabel : submitLabel}
+      <Button
+        type="submit"
+        variant="contained"
+        disabled={submitting}
+        data-testid="modal-submit"
+      >
+        {submitting
+          ? (submittingLabel ?? t("creating"))
+          : (submitLabel ?? t("create"))}
       </Button>
-    </Stack>
+    </div>
   );
 }

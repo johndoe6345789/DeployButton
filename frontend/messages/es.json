@@ -1,0 +1,121 @@
+{
+  "common": {
+    "appName": "DeployButton",
+    "loading": "Cargando...",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "saved": "Guardado.",
+    "done": "Hecho",
+    "create": "Crear",
+    "creating": "Creando...",
+    "switchToLight": "Cambiar a modo claro",
+    "switchToDark": "Cambiar a modo oscuro",
+    "failedToLoad": "No se pudo cargar"
+  },
+  "language": {
+    "label": "Idioma",
+    "en": "Inglés",
+    "es": "Español"
+  },
+  "statusBadge": {
+    "running": "En curso",
+    "success": "Éxito",
+    "failed": "Fallido",
+    "skipped": "Omitido",
+    "none": "Nunca ejecutado"
+  },
+  "dashboard": {
+    "title": "DeployButton",
+    "subtitle": "Despliegues con un clic para tus apps.",
+    "workflowsLink": "Flujos de trabajo",
+    "newProject": "Nuevo proyecto",
+    "noProjects": "Aún no hay proyectos. Crea uno para empezar."
+  },
+  "deployButton": {
+    "deploy": "Desplegar",
+    "deploying": "Desplegando...",
+    "failed": "Error al desplegar"
+  },
+  "projectCard": {
+    "lastRun": "última ejecución {time}",
+    "secondsAgo": "hace {n}s",
+    "minutesAgo": "hace {n}m",
+    "hoursAgo": "hace {n}h",
+    "daysAgo": "hace {n}d"
+  },
+  "newProjectModal": {
+    "title": "Nuevo proyecto",
+    "name": "Nombre",
+    "slug": "Slug (usado en la URL del webhook)",
+    "slugPlaceholder": "mi-app",
+    "repoUrl": "URL del repositorio",
+    "repoUrlPlaceholder": "github.com/tu/mi-app",
+    "workflow": "Flujo de trabajo",
+    "failedToLoad": "No se pudieron cargar los flujos de trabajo",
+    "chooseWorkflow": "Elige un flujo de trabajo",
+    "failedToCreate": "No se pudo crear el proyecto"
+  },
+  "workflowsList": {
+    "title": "Flujos de trabajo",
+    "backToDashboard": "Volver al panel",
+    "newWorkflow": "Nuevo flujo de trabajo",
+    "template": "Plantilla",
+    "delete": "Eliminar",
+    "defaultWorkflowName": "Nuevo flujo de trabajo",
+    "confirmDelete": "¿Eliminar este flujo de trabajo?"
+  },
+  "stepTypes": {
+    "git_pull": "Git pull",
+    "shell": "Comando de shell",
+    "npm_install": "Instalar dependencias",
+    "npm_build": "Compilar (npm/yarn/pnpm)",
+    "docker_build": "Compilar Docker",
+    "http_webhook": "Llamada webhook HTTP",
+    "delay": "Retraso",
+    "notify": "Notificar"
+  },
+  "workflowEditor": {
+    "backToWorkflows": "Volver a flujos de trabajo",
+    "descriptionPlaceholder": "Descripción",
+    "stepsHeading": "Pasos",
+    "addStep": "Añadir paso",
+    "noSteps": "Aún no hay pasos. Añade uno arriba.",
+    "configure": "Configurar",
+    "collapse": "Colapsar",
+    "remove": "Eliminar",
+    "dragToReorder": "Arrastrar para reordenar",
+    "failedToSave": "No se pudo guardar"
+  },
+  "runDetail": {
+    "backToRunHistory": "Volver al historial de ejecuciones",
+    "runNumber": "Ejecución #{id}"
+  },
+  "runHistory": {
+    "title": "Historial de ejecuciones",
+    "titleWithProject": "{name} — Historial de ejecuciones",
+    "backToDashboard": "Volver al panel",
+    "noRuns": "Aún no hay ejecuciones.",
+    "manual": "Manual",
+    "githubWebhook": "Webhook de GitHub"
+  },
+  "stepFields": {
+    "workingDirectory": "Directorio de trabajo",
+    "workingDirectoryPlaceholder": "/srv/repos/mi-app",
+    "command": "Comando",
+    "commandPlaceholder": "echo hello",
+    "packageManager": "Gestor de paquetes",
+    "script": "Script",
+    "imageTag": "Etiqueta de imagen",
+    "imageTagPlaceholder": "mi-app:latest",
+    "dockerfile": "Dockerfile",
+    "url": "URL",
+    "urlPlaceholder": "https://captain.example.com/.../triggerbuild?token=...",
+    "method": "Método",
+    "body": "Cuerpo (opcional)",
+    "seconds": "Segundos",
+    "message": "Mensaje",
+    "webhookUrl": "URL del webhook (opcional)"
+  }
+}

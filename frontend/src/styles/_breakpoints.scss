@@ -1,0 +1,15 @@
+// Mirrors the MUI theme's breakpoints (theme.ts) so SCSS and MUI agree.
+$breakpoint-sm: 600px;
+$breakpoint-md: 900px;
+
+@mixin sm-up {
+  @media (min-width: $breakpoint-sm) {
+    @content;
+  }
+}
+
+@mixin md-up {
+  @media (min-width: $breakpoint-md) {
+    @content;
+  }
+}

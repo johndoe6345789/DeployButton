@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithProviders } from "@/test-utils/renderWithProviders";
 import RunHistory from "./page";
 import { api } from "@/api/client";
 
@@ -40,7 +41,7 @@ describe("RunHistory page", () => {
   it("shows the project name and an empty state when there are no runs", async () => {
     (api.getProject as jest.Mock).mockResolvedValue(project);
     (api.listRuns as jest.Mock).mockResolvedValue([]);
-    render(<RunHistory />);
+    renderWithProviders(<RunHistory />);
 
     expect(
       await screen.findByText("My App — Run History"),
@@ -51,7 +52,7 @@ describe("RunHistory page", () => {
   it("renders a run row linking to the run detail page", async () => {
     (api.getProject as jest.Mock).mockResolvedValue(project);
     (api.listRuns as jest.Mock).mockResolvedValue([run]);
-    render(<RunHistory />);
+    renderWithProviders(<RunHistory />);
 
     const link = await screen.findByText("Manual");
     expect(link.closest("a")).toHaveAttribute("href", "/runs/7");
@@ -60,14 +61,14 @@ describe("RunHistory page", () => {
   it("shows an error message when loading fails", async () => {
     (api.getProject as jest.Mock).mockRejectedValue(new Error("down"));
     (api.listRuns as jest.Mock).mockResolvedValue([]);
-    render(<RunHistory />);
+    renderWithProviders(<RunHistory />);
     expect(await screen.findByText("down")).toBeInTheDocument();
   });
 
   it("shows a fallback error message for a non-Error rejection", async () => {
     (api.getProject as jest.Mock).mockRejectedValue("boom");
     (api.listRuns as jest.Mock).mockResolvedValue([]);
-    render(<RunHistory />);
+    renderWithProviders(<RunHistory />);
     expect(await screen.findByText("Failed to load")).toBeInTheDocument();
   });
 
@@ -76,7 +77,7 @@ describe("RunHistory page", () => {
     (api.listRuns as jest.Mock).mockResolvedValue([
       { ...run, trigger_type: "github_webhook" },
     ]);
-    render(<RunHistory />);
+    renderWithProviders(<RunHistory />);
     expect(await screen.findByText("GitHub webhook")).toBeInTheDocument();
   });
 });

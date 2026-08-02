@@ -1,12 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { arrayMove } from "@dnd-kit/sortable";
+import { useTranslations } from "next-intl";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { api } from "@/api/client";
 import type { EditableStep } from "@/types";
+import {
+  errorMessage,
+  reorderOnDragEnd,
+  toEditableSteps,
+} from "./workflowEditorHelpers";
 
 export function useWorkflowEditor(workflowId: number) {
+  const tCommon = useTranslations("common");
+  const tEditor = useTranslations("workflowEditor");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [steps, setSteps] = useState<EditableStep[]>([]);
@@ -21,27 +28,14 @@ export function useWorkflowEditor(workflowId: number) {
       .then((workflow) => {
         setName(workflow.name);
         setDescription(workflow.description ?? "");
-        setSteps(
-          workflow.steps.map((s) => ({
-            key: String(s.id),
-            name: s.name,
-            type: s.type,
-            config: s.config,
-          })),
-        );
+        setSteps(toEditableSteps(workflow.steps));
       })
-      .catch((e) => setError(e instanceof Error ? e.message : "Failed to load"))
+      .catch((e) => setError(errorMessage(e, tCommon("failedToLoad"))))
       .finally(() => setLoading(false));
   }, [workflowId]);
 
   function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-    setSteps((items) => {
-      const oldIndex = items.findIndex((i) => i.key === active.id);
-      const newIndex = items.findIndex((i) => i.key === over.id);
-      return arrayMove(items, oldIndex, newIndex);
-    });
+    setSteps((items) => reorderOnDragEnd(items, event));
   }
 
   async function handleSave() {
@@ -56,7 +50,7 @@ export function useWorkflowEditor(workflowId: number) {
       );
       setSaved(true);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to save");
+      setError(errorMessage(e, tEditor("failedToSave")));
     } finally {
       setSaving(false);
     }

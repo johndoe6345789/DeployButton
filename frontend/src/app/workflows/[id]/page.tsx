@@ -2,6 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import Typography from "@mui/material/Typography";
 import PageContainer from "@/components/PageContainer";
 import WorkflowEditorHeader from "@/components/WorkflowEditorHeader";
@@ -9,8 +10,11 @@ import StepsList from "@/components/StepsList";
 import SaveBar from "@/components/SaveBar";
 import { useWorkflowEditor } from "@/hooks/useWorkflowEditor";
 import type { EditableStep } from "@/types";
+import styles from "./page.module.scss";
 
 export default function WorkflowEditor() {
+  const t = useTranslations("workflowEditor");
+  const tc = useTranslations("common");
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const workflowId = Number(params.id);
@@ -28,7 +32,7 @@ export default function WorkflowEditor() {
     return (
       <PageContainer>
         <Typography variant="body2" color="text.secondary">
-          Loading...
+          {tc("loading")}
         </Typography>
       </PageContainer>
     );
@@ -40,9 +44,10 @@ export default function WorkflowEditor() {
         component={Link}
         href="/workflows"
         variant="body2"
-        sx={{ color: "primary.main" }}
+        className={styles.backLink}
+        data-testid="back-to-workflows"
       >
-        &larr; Back to workflows
+        &larr; {t("backToWorkflows")}
       </Typography>
 
       <WorkflowEditorHeader

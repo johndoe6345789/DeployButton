@@ -1,10 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import WorkflowEditorHeader from "./WorkflowEditorHeader";
+import { renderWithProviders } from "@/test-utils/renderWithProviders";
 
 describe("WorkflowEditorHeader", () => {
   it("renders the current name and description", () => {
-    render(
+    renderWithProviders(
       <WorkflowEditorHeader
         name="My Workflow"
         onNameChange={jest.fn()}
@@ -19,7 +20,7 @@ describe("WorkflowEditorHeader", () => {
 
   it("calls onNameChange when the name input changes", async () => {
     const onNameChange = jest.fn();
-    const { container } = render(
+    renderWithProviders(
       <WorkflowEditorHeader
         name=""
         onNameChange={onNameChange}
@@ -28,14 +29,13 @@ describe("WorkflowEditorHeader", () => {
         onAddStep={jest.fn()}
       />,
     );
-    const nameInput = container.querySelector("input") as HTMLInputElement;
-    await userEvent.type(nameInput, "x");
+    await userEvent.type(screen.getByTestId("workflow-name-input"), "x");
     expect(onNameChange).toHaveBeenCalled();
   });
 
   it("calls onDescriptionChange when the description changes", async () => {
     const onDescriptionChange = jest.fn();
-    const { container } = render(
+    renderWithProviders(
       <WorkflowEditorHeader
         name=""
         onNameChange={jest.fn()}
@@ -44,13 +44,15 @@ describe("WorkflowEditorHeader", () => {
         onAddStep={jest.fn()}
       />,
     );
-    const textarea = container.querySelector("textarea") as HTMLTextAreaElement;
-    await userEvent.type(textarea, "x");
+    await userEvent.type(
+      screen.getByTestId("workflow-description-input"),
+      "x",
+    );
     expect(onDescriptionChange).toHaveBeenCalled();
   });
 
   it("renders the Steps heading and an Add Step button", () => {
-    render(
+    renderWithProviders(
       <WorkflowEditorHeader
         name=""
         onNameChange={jest.fn()}

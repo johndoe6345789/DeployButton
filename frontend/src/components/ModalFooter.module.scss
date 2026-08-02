@@ -1,0 +1,7 @@
+@use "../styles/mixins" as *;
+
+.footer {
+  @include flex-row(8px);
+  justify-content: flex-end;
+  margin-top: 8px;
+}

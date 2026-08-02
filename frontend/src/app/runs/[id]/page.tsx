@@ -2,14 +2,17 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import Stack from "@mui/material/Stack";
+import { useTranslations } from "next-intl";
 import Typography from "@mui/material/Typography";
 import PageContainer from "@/components/PageContainer";
 import RunStepItem from "@/components/RunStepItem";
 import StatusBadge from "@/components/StatusBadge";
 import { useRunPolling } from "@/hooks/useRunPolling";
+import styles from "./page.module.scss";
 
 export default function RunDetailPage() {
+  const t = useTranslations("runDetail");
+  const tc = useTranslations("common");
   const params = useParams<{ id: string }>();
   const runId = Number(params.id);
   const { run, error } = useRunPolling(runId);
@@ -20,38 +23,44 @@ export default function RunDetailPage() {
         component={Link}
         href={run ? `/projects/${run.project_id}/runs` : "/"}
         variant="body2"
-        sx={{ color: "primary.main" }}
+        className={styles.backLink}
+        data-testid="back-to-run-history"
       >
-        &larr; Back to run history
+        &larr; {t("backToRunHistory")}
       </Typography>
 
-      <Stack
-        direction="row"
-        spacing={2}
-        sx={{ alignItems: "center", mt: 1 }}
-      >
-        <Typography variant="h4" sx={{ fontWeight: 700 }}>
-          Run #{runId}
+      <div className={styles.titleRow}>
+        <Typography variant="h4" className={styles.title}>
+          {t("runNumber", { id: runId })}
         </Typography>
         {run && <StatusBadge status={run.status} />}
-      </Stack>
+      </div>
 
       {error && (
-        <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+        <Typography
+          variant="body2"
+          color="error"
+          className={styles.message}
+          data-testid="run-detail-error"
+        >
           {error}
         </Typography>
       )}
       {!run && !error && (
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-          Loading...
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          className={styles.message}
+        >
+          {tc("loading")}
         </Typography>
       )}
 
-      <Stack spacing={1.5} sx={{ mt: 3 }}>
+      <div className={styles.steps} data-testid="run-steps">
         {run?.step_runs.map((step) => (
           <RunStepItem key={step.id} step={step} />
         ))}
-      </Stack>
+      </div>
     </PageContainer>
   );
 }

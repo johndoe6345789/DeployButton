@@ -1,72 +1,63 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import type { Project } from "@/types";
 import StatusBadge from "./StatusBadge";
 import DeployButton from "./DeployButton";
+import styles from "./ProjectCard.module.scss";
 
-function relativeTime(iso: string | null): string | null {
+function relativeTime(
+  iso: string | null,
+  t: (key: string, values: { n: number }) => string,
+): string | null {
   if (!iso) return null;
   const date = new Date(iso.replace(" ", "T") + "Z");
   const seconds = Math.round((Date.now() - date.getTime()) / 1000);
-  if (seconds < 60) return `${seconds}s ago`;
-  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-  return `${Math.floor(seconds / 86400)}d ago`;
+  if (seconds < 60) return t("secondsAgo", { n: seconds });
+  if (seconds < 3600) return t("minutesAgo", { n: Math.floor(seconds / 60) });
+  if (seconds < 86400) {
+    return t("hoursAgo", { n: Math.floor(seconds / 3600) });
+  }
+  return t("daysAgo", { n: Math.floor(seconds / 86400) });
 }
 
 export default function ProjectCard({ project }: { project: Project }) {
+  const t = useTranslations("projectCard");
   const lastRunTime =
-    relativeTime(project.last_run_finished_at) ??
-    relativeTime(project.last_run_started_at);
+    relativeTime(project.last_run_finished_at, t) ??
+    relativeTime(project.last_run_started_at, t);
 
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" data-testid="project-card">
       <CardContent>
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={2}
-          sx={{
-            alignItems: { sm: "center" },
-            justifyContent: { sm: "space-between" },
-          }}
-        >
-          <Box sx={{ minWidth: 0 }}>
-            <Stack
-              direction="row"
-              spacing={1}
-              sx={{ alignItems: "center", flexWrap: "wrap" }}
-            >
+        <div className={styles.row}>
+          <div className={styles.info}>
+            <div className={styles.nameRow}>
               <Typography
                 component={Link}
                 href={`/projects/${project.id}/runs`}
-                sx={{
-                  fontWeight: 600,
-                  color: "text.primary",
-                  textDecoration: "none",
-                }}
+                className={styles.name}
+                data-testid="project-name"
               >
                 {project.name}
               </Typography>
               <StatusBadge status={project.last_run_status} />
-            </Stack>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+            </div>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              className={styles.subtitle}
+            >
               {project.workflow_name}
-              {lastRunTime ? ` · last run ${lastRunTime}` : ""}
+              {lastRunTime ? ` · ${t("lastRun", { time: lastRunTime })}` : ""}
             </Typography>
-          </Box>
-          <Box
-            sx={{
-              flexShrink: 0,
-              alignSelf: { xs: "flex-start", sm: "auto" },
-            }}
-          >
+          </div>
+          <div className={styles.deploy}>
             <DeployButton projectId={project.id} />
-          </Box>
-        </Stack>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

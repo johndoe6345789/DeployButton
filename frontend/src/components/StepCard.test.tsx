@@ -1,8 +1,9 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useSortable } from "@dnd-kit/sortable";
 import StepCard from "./StepCard";
 import type { EditableStep } from "@/types";
+import { renderWithProviders } from "@/test-utils/renderWithProviders";
 
 jest.mock("@dnd-kit/sortable", () => ({
   ...jest.requireActual("@dnd-kit/sortable"),
@@ -31,41 +32,51 @@ describe("StepCard", () => {
   beforeEach(() => mockSortable(false));
 
   it("renders collapsed by default without the config form", () => {
-    render(<StepCard step={step} onChange={jest.fn()} onRemove={jest.fn()} />);
+    renderWithProviders(
+      <StepCard step={step} onChange={jest.fn()} onRemove={jest.fn()} />,
+    );
     expect(screen.queryByDisplayValue("/srv/app")).not.toBeInTheDocument();
   });
 
   it("expands to show the config form when Configure is clicked", async () => {
-    render(<StepCard step={step} onChange={jest.fn()} onRemove={jest.fn()} />);
-    await userEvent.click(screen.getByText("Configure"));
+    renderWithProviders(
+      <StepCard step={step} onChange={jest.fn()} onRemove={jest.fn()} />,
+    );
+    await userEvent.click(screen.getByTestId("step-toggle-configure"));
     expect(screen.getByDisplayValue("/srv/app")).toBeInTheDocument();
   });
 
   it("propagates name changes via onChange", async () => {
     const onChange = jest.fn();
-    render(<StepCard step={step} onChange={onChange} onRemove={jest.fn()} />);
-    await userEvent.type(screen.getByDisplayValue("Pull code"), "x");
+    renderWithProviders(
+      <StepCard step={step} onChange={onChange} onRemove={jest.fn()} />,
+    );
+    await userEvent.type(screen.getByTestId("step-name-input"), "x");
     expect(onChange).toHaveBeenCalled();
   });
 
   it("propagates config changes via onChange when expanded", async () => {
     const onChange = jest.fn();
-    render(<StepCard step={step} onChange={onChange} onRemove={jest.fn()} />);
-    await userEvent.click(screen.getByText("Configure"));
+    renderWithProviders(
+      <StepCard step={step} onChange={onChange} onRemove={jest.fn()} />,
+    );
+    await userEvent.click(screen.getByTestId("step-toggle-configure"));
     await userEvent.type(screen.getByDisplayValue("/srv/app"), "x");
     expect(onChange).toHaveBeenCalled();
   });
 
   it("calls onRemove when Remove is clicked", async () => {
     const onRemove = jest.fn();
-    render(<StepCard step={step} onChange={jest.fn()} onRemove={onRemove} />);
-    await userEvent.click(screen.getByText("Remove"));
+    renderWithProviders(
+      <StepCard step={step} onChange={jest.fn()} onRemove={onRemove} />,
+    );
+    await userEvent.click(screen.getByTestId("step-remove"));
     expect(onRemove).toHaveBeenCalledTimes(1);
   });
 
   it("fades out while being dragged", () => {
     mockSortable(true);
-    const { container } = render(
+    const { container } = renderWithProviders(
       <StepCard step={step} onChange={jest.fn()} onRemove={jest.fn()} />,
     );
     expect(container.firstChild).toHaveStyle({ opacity: "0.5" });
@@ -76,7 +87,7 @@ describe("StepCard", () => {
       ...step,
       type: "custom_type",
     } as unknown as EditableStep;
-    render(
+    renderWithProviders(
       <StepCard step={unknownStep} onChange={jest.fn()} onRemove={jest.fn()} />,
     );
     expect(screen.getByText("custom_type")).toBeInTheDocument();

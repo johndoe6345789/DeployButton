@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { api } from "@/api/client";
@@ -10,19 +11,21 @@ import WorkflowListItem from "@/components/WorkflowListItem";
 import { useWorkflows } from "@/hooks/useWorkflows";
 
 export default function WorkflowList() {
+  const t = useTranslations("workflowsList");
+  const tc = useTranslations("common");
   const router = useRouter();
   const { workflows, loading, error, refresh } = useWorkflows();
 
   async function handleCreate() {
     const workflow = await api.createWorkflow({
-      name: "New Workflow",
+      name: t("defaultWorkflowName"),
       description: "",
     });
     router.push(`/workflows/${workflow.id}`);
   }
 
   async function handleDelete(id: number) {
-    if (!confirm("Delete this workflow?")) return;
+    if (!confirm(t("confirmDelete"))) return;
     await api.deleteWorkflow(id);
     refresh();
   }
@@ -33,16 +36,16 @@ export default function WorkflowList() {
 
       {loading && (
         <Typography variant="body2" color="text.secondary">
-          Loading...
+          {tc("loading")}
         </Typography>
       )}
       {error && (
-        <Typography variant="body2" color="error">
+        <Typography variant="body2" color="error" data-testid="workflows-error">
           {error}
         </Typography>
       )}
 
-      <Stack spacing={1.5}>
+      <Stack spacing={1.5} data-testid="workflow-list">
         {workflows.map((w) => (
           <WorkflowListItem
             key={w.id}

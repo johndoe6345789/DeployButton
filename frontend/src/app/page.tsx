@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import PageContainer from "@/components/PageContainer";
@@ -10,6 +11,8 @@ import NewProjectModal from "@/components/NewProjectModal";
 import { useProjects } from "@/hooks/useProjects";
 
 export default function Dashboard() {
+  const t = useTranslations("dashboard");
+  const tc = useTranslations("common");
   const { projects, loading, error, refresh } = useProjects();
   const [showNewProject, setShowNewProject] = useState(false);
 
@@ -19,18 +22,18 @@ export default function Dashboard() {
 
       {loading && (
         <Typography variant="body2" color="text.secondary">
-          Loading...
+          {tc("loading")}
         </Typography>
       )}
       {error && (
-        <Typography variant="body2" color="error">
+        <Typography variant="body2" color="error" data-testid="dashboard-error">
           {error}
         </Typography>
       )}
 
       {!loading && projects.length === 0 && !error && (
         <Typography variant="body2" color="text.secondary">
-          No projects yet. Create one to get started.
+          {t("noProjects")}
         </Typography>
       )}
 

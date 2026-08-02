@@ -2,15 +2,18 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
-import Stack from "@mui/material/Stack";
+import { useTranslations } from "next-intl";
 import Typography from "@mui/material/Typography";
 import { api } from "@/api/client";
 import type { Project, WorkflowRun } from "@/types";
 import PageContainer from "@/components/PageContainer";
+import RunHistoryHeader from "@/components/RunHistoryHeader";
 import RunHistoryRow from "@/components/RunHistoryRow";
+import styles from "./page.module.scss";
 
 export default function RunHistory() {
+  const t = useTranslations("runHistory");
+  const tc = useTranslations("common");
   const params = useParams<{ id: string }>();
   const projectId = Number(params.id);
 
@@ -25,46 +28,50 @@ export default function RunHistory() {
         setProject(p);
         setRuns(r);
       })
-      .catch((e) => setError(e instanceof Error ? e.message : "Failed to load"))
+      .catch((e) =>
+        setError(e instanceof Error ? e.message : tc("failedToLoad")),
+      )
       .finally(() => setLoading(false));
   }, [projectId]);
 
   return (
     <PageContainer>
-      <Typography
-        component={Link}
-        href="/"
-        variant="body2"
-        sx={{ color: "primary.main" }}
-      >
-        &larr; Back to dashboard
-      </Typography>
-
-      <Typography variant="h4" sx={{ fontWeight: 700, mt: 1 }}>
-        {project ? `${project.name} — Run History` : "Run History"}
-      </Typography>
+      <RunHistoryHeader project={project} />
 
       {loading && (
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-          Loading...
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          className={styles.message}
+        >
+          {tc("loading")}
         </Typography>
       )}
       {error && (
-        <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+        <Typography
+          variant="body2"
+          color="error"
+          className={styles.message}
+          data-testid="run-history-error"
+        >
           {error}
         </Typography>
       )}
       {!loading && runs.length === 0 && !error && (
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-          No runs yet.
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          className={styles.message}
+        >
+          {t("noRuns")}
         </Typography>
       )}
 
-      <Stack spacing={1} sx={{ mt: 2 }}>
+      <div className={styles.runs} data-testid="run-history-list">
         {runs.map((run) => (
           <RunHistoryRow key={run.id} run={run} />
         ))}
-      </Stack>
+      </div>
     </PageContainer>
   );
 }

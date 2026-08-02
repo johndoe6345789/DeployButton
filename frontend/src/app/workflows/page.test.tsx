@@ -1,7 +1,8 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import WorkflowList from "./page";
 import { api } from "@/api/client";
+import { renderWithProviders } from "@/test-utils/renderWithProviders";
 
 const pushMock = jest.fn();
 jest.mock("@/api/client", () => ({
@@ -32,23 +33,29 @@ describe("WorkflowList", () => {
 
   it("renders workflows from the API", async () => {
     (api.listWorkflows as jest.Mock).mockResolvedValue([workflow]);
-    render(<WorkflowList />);
+    renderWithProviders(<WorkflowList />);
     expect(await screen.findByText("React App")).toBeInTheDocument();
   });
 
   it("shows an error message when loading fails", async () => {
     (api.listWorkflows as jest.Mock).mockRejectedValue(new Error("down"));
-    render(<WorkflowList />);
-    expect(await screen.findByText("down")).toBeInTheDocument();
+    renderWithProviders(<WorkflowList />);
+    expect(await screen.findByTestId("workflows-error")).toHaveTextContent(
+      "down",
+    );
   });
 
   it("creates a workflow and navigates to its editor", async () => {
     (api.listWorkflows as jest.Mock).mockResolvedValue([]);
     (api.createWorkflow as jest.Mock).mockResolvedValue({ id: 9 });
-    render(<WorkflowList />);
-    await screen.findByText("New Workflow");
+    renderWithProviders(<WorkflowList />);
+    await screen.findByTestId("new-workflow-button");
 
-    await userEvent.click(screen.getByText("New Workflow"));
+    await userEvent.click(screen.getByTestId("new-workflow-button"));
+    expect(api.createWorkflow).toHaveBeenCalledWith({
+      name: "New Workflow",
+      description: "",
+    });
     await waitFor(() => expect(pushMock).toHaveBeenCalledWith("/workflows/9"));
   });
 
@@ -57,9 +64,9 @@ describe("WorkflowList", () => {
     (api.deleteWorkflow as jest.Mock).mockResolvedValue(undefined);
     window.confirm = jest.fn(() => true);
 
-    render(<WorkflowList />);
+    renderWithProviders(<WorkflowList />);
     await screen.findByText("React App");
-    await userEvent.click(screen.getByText("Delete"));
+    await userEvent.click(screen.getByTestId("delete-workflow-button"));
 
     await waitFor(() => expect(api.deleteWorkflow).toHaveBeenCalledWith(1));
   });
@@ -68,9 +75,9 @@ describe("WorkflowList", () => {
     (api.listWorkflows as jest.Mock).mockResolvedValue([workflow]);
     window.confirm = jest.fn(() => false);
 
-    render(<WorkflowList />);
+    renderWithProviders(<WorkflowList />);
     await screen.findByText("React App");
-    await userEvent.click(screen.getByText("Delete"));
+    await userEvent.click(screen.getByTestId("delete-workflow-button"));
 
     expect(api.deleteWorkflow).not.toHaveBeenCalled();
   });

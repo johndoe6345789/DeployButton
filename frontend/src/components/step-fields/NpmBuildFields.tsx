@@ -1,19 +1,22 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { ManagerSelect, set, type FieldsProps } from "./shared";
 
 export default function NpmBuildFields({ config, onChange }: FieldsProps) {
+  const t = useTranslations("stepFields");
+
   return (
     <Stack spacing={1.5}>
       <TextField
         size="small"
         fullWidth
-        label="Working directory"
+        label={t("workingDirectory")}
         value={config.cwd ?? ""}
         onChange={(e) => onChange(set(config, "cwd", e.target.value))}
-        placeholder="/srv/repos/my-app"
+        placeholder={t("workingDirectoryPlaceholder")}
       />
       <ManagerSelect
         value={config.manager ?? "npm"}
@@ -22,7 +25,7 @@ export default function NpmBuildFields({ config, onChange }: FieldsProps) {
       <TextField
         size="small"
         fullWidth
-        label="Script"
+        label={t("script")}
         value={config.script ?? "build"}
         onChange={(e) => onChange(set(config, "script", e.target.value))}
       />

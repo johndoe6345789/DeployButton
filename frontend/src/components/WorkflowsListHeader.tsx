@@ -1,46 +1,41 @@
 "use client";
 
 import Link from "next/link";
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
+import { useTranslations } from "next-intl";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import styles from "./WorkflowsListHeader.module.scss";
 
 export default function WorkflowsListHeader({
   onCreate,
 }: {
   onCreate: () => void;
 }) {
+  const t = useTranslations("workflowsList");
+
   return (
-    <Stack
-      direction={{ xs: "column", sm: "row" }}
-      spacing={2}
-      sx={{
-        mb: 3,
-        alignItems: { sm: "center" },
-        justifyContent: { sm: "space-between" },
-      }}
-    >
-      <Box>
-        <Typography variant="h4" sx={{ fontWeight: 700 }}>
-          Workflows
+    <header className={styles.header}>
+      <div>
+        <Typography variant="h4" className={styles.title}>
+          {t("title")}
         </Typography>
         <Typography
           component={Link}
           href="/"
           variant="body2"
-          sx={{ color: "primary.main" }}
+          className={styles.backLink}
         >
-          &larr; Back to dashboard
+          &larr; {t("backToDashboard")}
         </Typography>
-      </Box>
+      </div>
       <Button
         variant="contained"
         onClick={onCreate}
-        sx={{ alignSelf: { xs: "flex-start", sm: "auto" } }}
+        className={styles.createButton}
+        data-testid="new-workflow-button"
       >
-        New Workflow
+        {t("newWorkflow")}
       </Button>
-    </Stack>
+    </header>
   );
 }

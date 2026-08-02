@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { api } from "@/api/client";
 import type { RunDetail } from "@/types";
 
 const POLL_INTERVAL_MS = 1500;
 
 export function useRunPolling(runId: number) {
+  const t = useTranslations("common");
   const [run, setRun] = useState<RunDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -24,7 +26,7 @@ export function useRunPolling(runId: number) {
         }
       } catch (e) {
         if (!cancelled) {
-          setError(e instanceof Error ? e.message : "Failed to load");
+          setError(e instanceof Error ? e.message : t("failedToLoad"));
         }
       }
     }

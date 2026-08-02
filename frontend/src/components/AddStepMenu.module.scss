@@ -1,0 +1,6 @@
+@use "../styles/mixins" as *;
+
+.menu {
+  @include flex-row(8px);
+  align-items: center;
+}

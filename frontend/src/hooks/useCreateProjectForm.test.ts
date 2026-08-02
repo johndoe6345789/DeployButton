@@ -1,6 +1,7 @@
 import { renderHook, waitFor, act } from "@testing-library/react";
 import { useCreateProjectForm } from "./useCreateProjectForm";
 import { api } from "@/api/client";
+import { Providers } from "@/test-utils/renderWithProviders";
 
 jest.mock("@/api/client", () => ({
   api: { listWorkflows: jest.fn(), createProject: jest.fn() },
@@ -17,20 +18,26 @@ describe("useCreateProjectForm", () => {
       { id: 5 },
       { id: 6 },
     ]);
-    const { result } = renderHook(() => useCreateProjectForm(jest.fn()));
+    const { result } = renderHook(() => useCreateProjectForm(jest.fn()), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.workflowId).toBe(5));
   });
 
   it("leaves workflowId null when there are no workflows", async () => {
     (api.listWorkflows as jest.Mock).mockResolvedValue([]);
-    const { result } = renderHook(() => useCreateProjectForm(jest.fn()));
+    const { result } = renderHook(() => useCreateProjectForm(jest.fn()), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.workflows).toEqual([]));
     expect(result.current.workflowId).toBeNull();
   });
 
   it("sets an error if a workflow is not chosen on submit", async () => {
     (api.listWorkflows as jest.Mock).mockResolvedValue([]);
-    const { result } = renderHook(() => useCreateProjectForm(jest.fn()));
+    const { result } = renderHook(() => useCreateProjectForm(jest.fn()), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.workflows).toEqual([]));
 
     await act(async () => {
@@ -45,7 +52,9 @@ describe("useCreateProjectForm", () => {
     (api.listWorkflows as jest.Mock).mockResolvedValue([{ id: 1 }]);
     (api.createProject as jest.Mock).mockResolvedValue({ id: 9 });
     const onCreated = jest.fn();
-    const { result } = renderHook(() => useCreateProjectForm(onCreated));
+    const { result } = renderHook(() => useCreateProjectForm(onCreated), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.workflowId).toBe(1));
 
     act(() => result.current.setName("App"));
@@ -68,7 +77,9 @@ describe("useCreateProjectForm", () => {
 
   it("uses a fallback error when loading workflows fails with a non-Error", async () => {
     (api.listWorkflows as jest.Mock).mockRejectedValue("boom");
-    const { result } = renderHook(() => useCreateProjectForm(jest.fn()));
+    const { result } = renderHook(() => useCreateProjectForm(jest.fn()), {
+      wrapper: Providers,
+    });
     await waitFor(() =>
       expect(result.current.error).toBe("Failed to load workflows"),
     );
@@ -77,7 +88,9 @@ describe("useCreateProjectForm", () => {
   it("uses a fallback error when submit fails with a non-Error", async () => {
     (api.listWorkflows as jest.Mock).mockResolvedValue([{ id: 1 }]);
     (api.createProject as jest.Mock).mockRejectedValue("boom");
-    const { result } = renderHook(() => useCreateProjectForm(jest.fn()));
+    const { result } = renderHook(() => useCreateProjectForm(jest.fn()), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.workflowId).toBe(1));
 
     await act(async () => {
@@ -92,7 +105,9 @@ describe("useCreateProjectForm", () => {
   it("sets an error and re-enables submitting on failure", async () => {
     (api.listWorkflows as jest.Mock).mockResolvedValue([{ id: 1 }]);
     (api.createProject as jest.Mock).mockRejectedValue(new Error("nope"));
-    const { result } = renderHook(() => useCreateProjectForm(jest.fn()));
+    const { result } = renderHook(() => useCreateProjectForm(jest.fn()), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.workflowId).toBe(1));
 
     await act(async () => {

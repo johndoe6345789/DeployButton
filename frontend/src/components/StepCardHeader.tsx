@@ -1,12 +1,13 @@
 "use client";
 
-import Stack from "@mui/material/Stack";
+import { useTranslations } from "next-intl";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import type { EditableStep } from "@/types";
+import styles from "./StepCardHeader.module.scss";
 
 export default function StepCardHeader({
   step,
@@ -25,21 +26,16 @@ export default function StepCardHeader({
   onRemove: () => void;
   dragHandleProps: Record<string, unknown>;
 }) {
+  const t = useTranslations("workflowEditor");
+
   return (
-    <Stack
-      direction={{ xs: "column", sm: "row" }}
-      spacing={1}
-      sx={{ alignItems: { sm: "center" }, p: 1 }}
-    >
-      <Stack
-        direction="row"
-        spacing={1}
-        sx={{ alignItems: "center", flex: 1 }}
-      >
+    <div className={styles.header} data-testid="step-card-header">
+      <div className={styles.nameRow}>
         <IconButton
           {...dragHandleProps}
           size="small"
-          aria-label="Drag to reorder"
+          aria-label={t("dragToReorder")}
+          data-testid="step-drag-handle"
         >
           <DragIndicatorIcon fontSize="small" />
         </IconButton>
@@ -49,25 +45,27 @@ export default function StepCardHeader({
           fullWidth
           value={step.name}
           onChange={(e) => onNameChange(e.target.value)}
+          slotProps={{ htmlInput: { "data-testid": "step-name-input" } }}
         />
-      </Stack>
-      <Stack
-        direction="row"
-        spacing={1}
-        sx={{
-          alignItems: "center",
-          flexWrap: "wrap",
-          pl: { xs: 5, sm: 0 },
-        }}
-      >
-        <Chip size="small" label={typeLabel} />
-        <Button size="small" onClick={onToggleExpanded}>
-          {expanded ? "Collapse" : "Configure"}
+      </div>
+      <div className={styles.actions}>
+        <Chip size="small" label={typeLabel} data-testid="step-type-chip" />
+        <Button
+          size="small"
+          onClick={onToggleExpanded}
+          data-testid="step-toggle-configure"
+        >
+          {expanded ? t("collapse") : t("configure")}
         </Button>
-        <Button size="small" color="error" onClick={onRemove}>
-          Remove
+        <Button
+          size="small"
+          color="error"
+          onClick={onRemove}
+          data-testid="step-remove"
+        >
+          {t("remove")}
         </Button>
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 }

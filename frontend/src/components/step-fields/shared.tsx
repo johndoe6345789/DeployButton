@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import TextField from "@mui/material/TextField";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,12 +22,14 @@ export function ManagerSelect({
   value: string;
   onChange: (value: string) => void;
 }) {
+  const t = useTranslations("stepFields");
+
   return (
     <TextField
       select
       size="small"
       fullWidth
-      label="Package manager"
+      label={t("packageManager")}
       slotProps={{ select: { native: true } }}
       value={value}
       onChange={(e) => onChange(e.target.value)}
