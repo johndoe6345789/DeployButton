@@ -5,19 +5,16 @@
 
 using namespace drogon;
 
-namespace deploybutton
-{
+namespace deploybutton {
 // No signature verification in v1 (see plan's explicit non-goals) -- this
 // endpoint is reachable only via Tailscale/Cloudflare Tunnel, matching the
 // project's no-application-auth decision.
-void WebhooksController::github(const HttpRequestPtr &req,
-                                 std::function<void(const HttpResponsePtr &)> &&callback,
-                                 std::string slug)
-{
+void WebhooksController::github(
+    const HttpRequestPtr &req,
+    std::function<void(const HttpResponsePtr &)> &&callback, std::string slug) {
     auto db = app().getDbClient();
     auto project = getProjectBySlug(db, slug);
-    if (project.isNull())
-    {
+    if (project.isNull()) {
         callback(notFound("project"));
         return;
     }
@@ -25,9 +22,9 @@ void WebhooksController::github(const HttpRequestPtr &req,
     long long projectId = project["id"].asInt64();
     long long workflowId = project["workflow_id"].asInt64();
     auto runId = startWorkflowRun(projectId, workflowId, "github_webhook");
-    if (runId < 0)
-    {
-        callback(errorResponse(k409Conflict, "A deploy for this project is already running"));
+    if (runId < 0) {
+        callback(errorResponse(k409Conflict,
+                               "A deploy for this project is already running"));
         return;
     }
 

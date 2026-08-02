@@ -1,5 +1,6 @@
 build/
 build-local/
+build-test/
 data/*.db
 data/*.db-journal
 CMakeUserPresets.json

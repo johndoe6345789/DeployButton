@@ -1,12 +1,8 @@
 #include <drogon/drogon.h>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <string>
-#include "db/Bootstrap.h"
+#include "db/Schema.h"
+#include "db/Seed.h"
 
-int main()
-{
+int main() {
     drogon::app().loadConfigFile("./config.json");
 
     drogon::app().registerBeginningAdvice([]() {

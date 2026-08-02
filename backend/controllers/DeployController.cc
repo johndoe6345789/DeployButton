@@ -5,25 +5,22 @@
 
 using namespace drogon;
 
-namespace deploybutton
-{
-void DeployController::deploy(const HttpRequestPtr &req,
-                               std::function<void(const HttpResponsePtr &)> &&callback,
-                               long long id)
-{
+namespace deploybutton {
+void DeployController::deploy(
+    const HttpRequestPtr &req,
+    std::function<void(const HttpResponsePtr &)> &&callback, long long id) {
     auto db = app().getDbClient();
     auto project = getProject(db, id);
-    if (project.isNull())
-    {
+    if (project.isNull()) {
         callback(notFound("project"));
         return;
     }
 
     long long workflowId = project["workflow_id"].asInt64();
     auto runId = startWorkflowRun(id, workflowId, "manual");
-    if (runId < 0)
-    {
-        callback(errorResponse(k409Conflict, "A deploy for this project is already running"));
+    if (runId < 0) {
+        callback(errorResponse(k409Conflict,
+                               "A deploy for this project is already running"));
         return;
     }
 
