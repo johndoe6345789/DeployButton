@@ -1,8 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { api } from "@/api/client";
+import PageContainer from "@/components/PageContainer";
+import WorkflowsListHeader from "@/components/WorkflowsListHeader";
 import WorkflowListItem from "@/components/WorkflowListItem";
 import { useWorkflows } from "@/hooks/useWorkflows";
 
@@ -25,26 +28,21 @@ export default function WorkflowList() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Workflows</h1>
-          <Link href="/" className="text-sm text-indigo-600 hover:underline">
-            &larr; Back to dashboard
-          </Link>
-        </div>
-        <button
-          onClick={handleCreate}
-          className="self-start rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-500 sm:self-auto"
-        >
-          New Workflow
-        </button>
-      </div>
+    <PageContainer>
+      <WorkflowsListHeader onCreate={handleCreate} />
 
-      {loading && <p className="text-sm text-gray-500">Loading...</p>}
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {loading && (
+        <Typography variant="body2" color="text.secondary">
+          Loading...
+        </Typography>
+      )}
+      {error && (
+        <Typography variant="body2" color="error">
+          {error}
+        </Typography>
+      )}
 
-      <div className="flex flex-col gap-3">
+      <Stack spacing={1.5}>
         {workflows.map((w) => (
           <WorkflowListItem
             key={w.id}
@@ -52,7 +50,7 @@ export default function WorkflowList() {
             onDelete={() => handleDelete(w.id)}
           />
         ))}
-      </div>
-    </div>
+      </Stack>
+    </PageContainer>
   );
 }

@@ -1,5 +1,11 @@
 "use client";
 
+import Stack from "@mui/material/Stack";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
+import Chip from "@mui/material/Chip";
+import Button from "@mui/material/Button";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import type { EditableStep } from "@/types";
 
 export default function StepCardHeader({
@@ -20,38 +26,48 @@ export default function StepCardHeader({
   dragHandleProps: Record<string, unknown>;
 }) {
   return (
-    <div className="flex flex-col gap-2 p-2 sm:flex-row sm:items-center">
-      <div className="flex items-center gap-2">
-        <button
+    <Stack
+      direction={{ xs: "column", sm: "row" }}
+      spacing={1}
+      sx={{ alignItems: { sm: "center" }, p: 1 }}
+    >
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{ alignItems: "center", flex: 1 }}
+      >
+        <IconButton
           {...dragHandleProps}
-          className="cursor-grab px-1 text-gray-400 active:cursor-grabbing"
+          size="small"
           aria-label="Drag to reorder"
         >
-          ⠿
-        </button>
-        <input
-          className="min-w-0 flex-1 rounded-md border border-transparent bg-transparent px-1 py-0.5 text-sm font-medium hover:border-black/10 focus:border-black/20 dark:hover:border-white/10"
+          <DragIndicatorIcon fontSize="small" />
+        </IconButton>
+        <TextField
+          size="small"
+          variant="standard"
+          fullWidth
           value={step.name}
           onChange={(e) => onNameChange(e.target.value)}
         />
-      </div>
-      <div className="flex flex-wrap items-center gap-2 pl-7 sm:flex-1 sm:justify-end sm:pl-0">
-        <span className="rounded-full bg-black/5 px-2 py-0.5 text-xs text-gray-600 dark:bg-white/10 dark:text-gray-300">
-          {typeLabel}
-        </span>
-        <button
-          onClick={onToggleExpanded}
-          className="text-xs text-gray-500 hover:underline"
-        >
+      </Stack>
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          alignItems: "center",
+          flexWrap: "wrap",
+          pl: { xs: 5, sm: 0 },
+        }}
+      >
+        <Chip size="small" label={typeLabel} />
+        <Button size="small" onClick={onToggleExpanded}>
           {expanded ? "Collapse" : "Configure"}
-        </button>
-        <button
-          onClick={onRemove}
-          className="text-xs text-red-600 hover:underline"
-        >
+        </Button>
+        <Button size="small" color="error" onClick={onRemove}>
           Remove
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Stack>
+    </Stack>
   );
 }

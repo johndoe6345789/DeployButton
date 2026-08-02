@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import PageContainer from "@/components/PageContainer";
 import DashboardHeader from "@/components/DashboardHeader";
 import ProjectCard from "@/components/ProjectCard";
 import NewProjectModal from "@/components/NewProjectModal";
@@ -11,23 +14,31 @@ export default function Dashboard() {
   const [showNewProject, setShowNewProject] = useState(false);
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <PageContainer>
       <DashboardHeader onNewProject={() => setShowNewProject(true)} />
 
-      {loading && <p className="text-sm text-gray-500">Loading...</p>}
-      {error && <p className="text-sm text-red-600">{error}</p>}
-
-      {!loading && projects.length === 0 && !error && (
-        <p className="text-sm text-gray-500">
-          No projects yet. Create one to get started.
-        </p>
+      {loading && (
+        <Typography variant="body2" color="text.secondary">
+          Loading...
+        </Typography>
+      )}
+      {error && (
+        <Typography variant="body2" color="error">
+          {error}
+        </Typography>
       )}
 
-      <div className="flex flex-col gap-3">
+      {!loading && projects.length === 0 && !error && (
+        <Typography variant="body2" color="text.secondary">
+          No projects yet. Create one to get started.
+        </Typography>
+      )}
+
+      <Stack spacing={1.5}>
         {projects.map((p) => (
           <ProjectCard key={p.id} project={p} />
         ))}
-      </div>
+      </Stack>
 
       {showNewProject && (
         <NewProjectModal
@@ -38,6 +49,6 @@ export default function Dashboard() {
           }}
         />
       )}
-    </div>
+    </PageContainer>
   );
 }

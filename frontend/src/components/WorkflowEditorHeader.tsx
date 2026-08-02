@@ -1,5 +1,8 @@
 "use client";
 
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
 import AddStepMenu from "./AddStepMenu";
 import type { EditableStep } from "@/types";
 
@@ -18,25 +21,37 @@ export default function WorkflowEditorHeader({
 }) {
   return (
     <>
-      <div className="mt-4 flex flex-col gap-2">
-        <input
-          className="rounded-md border border-black/20 px-2 py-1 text-xl font-bold dark:border-white/20 dark:bg-neutral-800"
+      <Stack spacing={1.5} sx={{ mt: 2 }}>
+        <TextField
+          variant="standard"
           value={name}
           onChange={(e) => onNameChange(e.target.value)}
+          slotProps={{
+            input: { sx: { fontSize: "1.5rem", fontWeight: 700 } },
+          }}
         />
-        <textarea
-          className="rounded-md border border-black/20 px-2 py-1 text-sm dark:border-white/20 dark:bg-neutral-800"
+        <TextField
+          size="small"
+          multiline
+          rows={2}
           value={description}
           onChange={(e) => onDescriptionChange(e.target.value)}
-          rows={2}
           placeholder="Description"
         />
-      </div>
+      </Stack>
 
-      <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-lg font-semibold">Steps</h2>
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        spacing={1.5}
+        sx={{
+          mt: 3,
+          alignItems: { sm: "center" },
+          justifyContent: { sm: "space-between" },
+        }}
+      >
+        <Typography variant="h6">Steps</Typography>
         <AddStepMenu onAdd={onAddStep} />
-      </div>
+      </Stack>
     </>
   );
 }

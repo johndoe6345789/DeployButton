@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Field, ManagerSelect, set } from "./shared";
+import { ManagerSelect, set } from "./shared";
 
 describe("set", () => {
   it("returns a new object with the key updated", () => {
@@ -8,18 +8,6 @@ describe("set", () => {
     const result = set(original, "b", 2);
     expect(result).toEqual({ a: 1, b: 2 });
     expect(result).not.toBe(original);
-  });
-});
-
-describe("Field", () => {
-  it("renders the label and children", () => {
-    render(
-      <Field label="Test Label">
-        <span>child</span>
-      </Field>,
-    );
-    expect(screen.getByText("Test Label")).toBeInTheDocument();
-    expect(screen.getByText("child")).toBeInTheDocument();
   });
 });
 

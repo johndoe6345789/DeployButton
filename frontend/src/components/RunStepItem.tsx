@@ -1,20 +1,49 @@
 "use client";
 
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import StatusBadge from "./StatusBadge";
 import type { StepRun } from "@/types";
 
 export default function RunStepItem({ step }: { step: StepRun }) {
   return (
-    <div className="rounded-md border border-black/10 dark:border-white/10">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-black/10 px-3 py-2 dark:border-white/10">
-        <span className="text-sm font-medium">{step.name}</span>
+    <Paper variant="outlined">
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          borderBottom: 1,
+          borderColor: "divider",
+          px: 2,
+          py: 1,
+        }}
+      >
+        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+          {step.name}
+        </Typography>
         <StatusBadge status={step.status} />
-      </div>
+      </Stack>
       {step.output && (
-        <pre className="max-h-64 overflow-auto whitespace-pre-wrap p-3 text-xs text-gray-700 dark:text-gray-300">
+        <Box
+          component="pre"
+          sx={{
+            maxHeight: 256,
+            overflow: "auto",
+            whiteSpace: "pre-wrap",
+            m: 0,
+            p: 1.5,
+            fontSize: "0.75rem",
+            color: "text.secondary",
+          }}
+        >
           {step.output}
-        </pre>
+        </Box>
       )}
-    </div>
+    </Paper>
   );
 }

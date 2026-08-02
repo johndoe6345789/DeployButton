@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
 import type { EditableStep } from "@/types";
 import { STEP_TYPES } from "@/types";
 import StepCardHeader from "./StepCardHeader";
@@ -37,11 +39,7 @@ export default function StepCard({
     STEP_TYPES.find((t) => t.value === step.type)?.label ?? step.type;
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="rounded-md border border-black/10 bg-white dark:border-white/10 dark:bg-neutral-900"
-    >
+    <Paper ref={setNodeRef} style={style} variant="outlined">
       <StepCardHeader
         step={step}
         typeLabel={typeLabel}
@@ -52,14 +50,14 @@ export default function StepCard({
         dragHandleProps={{ ...attributes, ...listeners }}
       />
       {expanded && (
-        <div className="border-t border-black/10 p-3 dark:border-white/10">
+        <Box sx={{ borderTop: 1, borderColor: "divider", p: 1.5 }}>
           <StepConfigForm
             type={step.type}
             config={step.config}
             onChange={(config) => onChange({ ...step, config })}
           />
-        </div>
+        </Box>
       )}
-    </div>
+    </Paper>
   );
 }

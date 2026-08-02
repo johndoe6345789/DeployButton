@@ -2,6 +2,8 @@
 
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import Typography from "@mui/material/Typography";
+import PageContainer from "@/components/PageContainer";
 import WorkflowEditorHeader from "@/components/WorkflowEditorHeader";
 import StepsList from "@/components/StepsList";
 import SaveBar from "@/components/SaveBar";
@@ -24,20 +26,24 @@ export default function WorkflowEditor() {
 
   if (editor.loading) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-10 text-sm text-gray-500 sm:px-6">
-        Loading...
-      </div>
+      <PageContainer>
+        <Typography variant="body2" color="text.secondary">
+          Loading...
+        </Typography>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <Link
+    <PageContainer>
+      <Typography
+        component={Link}
         href="/workflows"
-        className="text-sm text-indigo-600 hover:underline"
+        variant="body2"
+        sx={{ color: "primary.main" }}
       >
         &larr; Back to workflows
-      </Link>
+      </Typography>
 
       <WorkflowEditorHeader
         name={editor.name}
@@ -61,6 +67,6 @@ export default function WorkflowEditor() {
         onSave={editor.handleSave}
         onDone={() => router.push("/workflows")}
       />
-    </div>
+    </PageContainer>
   );
 }

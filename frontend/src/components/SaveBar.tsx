@@ -1,5 +1,9 @@
 "use client";
 
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+
 export default function SaveBar({
   saving,
   saved,
@@ -14,22 +18,27 @@ export default function SaveBar({
   onDone: () => void;
 }) {
   return (
-    <div className="mt-6 flex flex-wrap items-center gap-3">
-      <button
-        onClick={onSave}
-        disabled={saving}
-        className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-50"
-      >
+    <Stack
+      direction="row"
+      spacing={2}
+      sx={{ alignItems: "center", flexWrap: "wrap", mt: 3 }}
+    >
+      <Button variant="contained" onClick={onSave} disabled={saving}>
         {saving ? "Saving..." : "Save"}
-      </button>
-      {saved && <span className="text-sm text-green-600">Saved.</span>}
-      {error && <span className="text-sm text-red-600">{error}</span>}
-      <button
-        onClick={onDone}
-        className="text-sm text-gray-500 hover:underline"
-      >
+      </Button>
+      {saved && (
+        <Typography variant="body2" color="success.main">
+          Saved.
+        </Typography>
+      )}
+      {error && (
+        <Typography variant="body2" color="error">
+          {error}
+        </Typography>
+      )}
+      <Button color="inherit" onClick={onDone}>
         Done
-      </button>
-    </div>
+      </Button>
+    </Stack>
   );
 }

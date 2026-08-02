@@ -1,5 +1,8 @@
 "use client";
 
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+
 export function ModalFooter({
   onCancel,
   submitting,
@@ -12,21 +15,17 @@ export function ModalFooter({
   submittingLabel?: string;
 }) {
   return (
-    <div className="mt-2 flex justify-end gap-2">
-      <button
-        type="button"
-        onClick={onCancel}
-        className="rounded-md px-3 py-1.5 text-sm font-semibold hover:bg-black/5 dark:hover:bg-white/10"
-      >
+    <Stack
+      direction="row"
+      spacing={1}
+      sx={{ justifyContent: "flex-end", mt: 1 }}
+    >
+      <Button type="button" onClick={onCancel} color="inherit">
         Cancel
-      </button>
-      <button
-        type="submit"
-        disabled={submitting}
-        className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-50"
-      >
+      </Button>
+      <Button type="submit" variant="contained" disabled={submitting}>
         {submitting ? submittingLabel : submitLabel}
-      </button>
-    </div>
+      </Button>
+    </Stack>
   );
 }

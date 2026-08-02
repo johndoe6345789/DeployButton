@@ -12,6 +12,8 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import StepCard from "./StepCard";
 import type { EditableStep } from "@/types";
 
@@ -43,7 +45,7 @@ export default function StepsList({
           items={steps.map((s) => s.key)}
           strategy={verticalListSortingStrategy}
         >
-          <div className="mt-3 flex flex-col gap-2">
+          <Stack spacing={1} sx={{ mt: 1.5 }}>
             {steps.map((step) => (
               <StepCard
                 key={step.key}
@@ -52,14 +54,14 @@ export default function StepsList({
                 onRemove={() => onRemoveStep(step.key)}
               />
             ))}
-          </div>
+          </Stack>
         </SortableContext>
       </DndContext>
 
       {steps.length === 0 && (
-        <p className="mt-4 text-sm text-gray-500">
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
           No steps yet. Add one above.
-        </p>
+        </Typography>
       )}
     </>
   );

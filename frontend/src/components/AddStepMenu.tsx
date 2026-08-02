@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import type { EditableStep, StepType } from "@/types";
 import { STEP_TYPES } from "@/types";
 
@@ -34,9 +37,11 @@ export default function AddStepMenu({
   const [type, setType] = useState<StepType>("shell");
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <select
-        className="min-w-0 flex-1 rounded-md border border-black/20 px-2 py-1 text-sm sm:flex-none dark:border-white/20 dark:bg-neutral-800"
+    <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+      <TextField
+        select
+        size="small"
+        slotProps={{ select: { native: true } }}
         value={type}
         onChange={(e) => setType(e.target.value as StepType)}
       >
@@ -45,8 +50,9 @@ export default function AddStepMenu({
             {t.label}
           </option>
         ))}
-      </select>
-      <button
+      </TextField>
+      <Button
+        variant="contained"
         onClick={() =>
           onAdd({
             key: crypto.randomUUID(),
@@ -55,10 +61,9 @@ export default function AddStepMenu({
             config: defaultConfig(type),
           })
         }
-        className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-500"
       >
         Add Step
-      </button>
-    </div>
+      </Button>
+    </Stack>
   );
 }

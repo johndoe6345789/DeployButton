@@ -7,9 +7,9 @@ const eslintConfig = defineConfig([
   ...nextTs,
   {
     rules: {
-      // 80-line files / 80-column width, project convention. Tailwind
-      // className strings are exempt from the width check (ignoreStrings)
-      // since a single unbroken class list can't be wrapped like code can.
+      // 80-line files / 80-column width, project convention. Long string
+      // literals (e.g. URLs) are exempt from the width check since they
+      // can't be wrapped like code can.
       "max-lines": ["error", { max: 80, skipBlankLines: false, skipComments: false }],
       "max-len": [
         "error",

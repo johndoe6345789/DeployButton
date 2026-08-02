@@ -6,10 +6,10 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-export default function DashboardHeader({
-  onNewProject,
+export default function WorkflowsListHeader({
+  onCreate,
 }: {
-  onNewProject: () => void;
+  onCreate: () => void;
 }) {
   return (
     <Stack
@@ -23,20 +23,24 @@ export default function DashboardHeader({
     >
       <Box>
         <Typography variant="h4" sx={{ fontWeight: 700 }}>
-          DeployButton
+          Workflows
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          One-click deploys for your apps.
+        <Typography
+          component={Link}
+          href="/"
+          variant="body2"
+          sx={{ color: "primary.main" }}
+        >
+          &larr; Back to dashboard
         </Typography>
       </Box>
-      <Stack direction="row" spacing={1}>
-        <Button component={Link} href="/workflows" color="inherit">
-          Workflows
-        </Button>
-        <Button variant="contained" onClick={onNewProject}>
-          New Project
-        </Button>
-      </Stack>
+      <Button
+        variant="contained"
+        onClick={onCreate}
+        sx={{ alignSelf: { xs: "flex-start", sm: "auto" } }}
+      >
+        New Workflow
+      </Button>
     </Stack>
   );
 }

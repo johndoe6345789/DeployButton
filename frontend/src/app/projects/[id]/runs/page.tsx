@@ -3,9 +3,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { api } from "@/api/client";
 import type { Project, WorkflowRun } from "@/types";
-import StatusBadge from "@/components/StatusBadge";
+import PageContainer from "@/components/PageContainer";
+import RunHistoryRow from "@/components/RunHistoryRow";
 
 export default function RunHistory() {
   const params = useParams<{ id: string }>();
@@ -27,41 +30,41 @@ export default function RunHistory() {
   }, [projectId]);
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <Link href="/" className="text-sm text-indigo-600 hover:underline">
+    <PageContainer>
+      <Typography
+        component={Link}
+        href="/"
+        variant="body2"
+        sx={{ color: "primary.main" }}
+      >
         &larr; Back to dashboard
-      </Link>
+      </Typography>
 
-      <h1 className="mt-2 text-2xl font-bold">
+      <Typography variant="h4" sx={{ fontWeight: 700, mt: 1 }}>
         {project ? `${project.name} — Run History` : "Run History"}
-      </h1>
+      </Typography>
 
-      {loading && <p className="mt-4 text-sm text-gray-500">Loading...</p>}
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
-
+      {loading && (
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+          Loading...
+        </Typography>
+      )}
+      {error && (
+        <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+          {error}
+        </Typography>
+      )}
       {!loading && runs.length === 0 && !error && (
-        <p className="mt-4 text-sm text-gray-500">No runs yet.</p>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+          No runs yet.
+        </Typography>
       )}
 
-      <div className="mt-4 flex flex-col gap-2">
+      <Stack spacing={1} sx={{ mt: 2 }}>
         {runs.map((run) => (
-          <Link
-            key={run.id}
-            href={`/runs/${run.id}`}
-            className="flex flex-col gap-1 rounded-md border border-black/10 p-3 hover:bg-black/5 sm:flex-row sm:items-center sm:justify-between dark:border-white/10 dark:hover:bg-white/5"
-          >
-            <div className="flex flex-wrap items-center gap-3">
-              <StatusBadge status={run.status} />
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                {run.trigger_type === "manual" ? "Manual" : "GitHub webhook"}
-              </span>
-            </div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">
-              {run.started_at}
-            </div>
-          </Link>
+          <RunHistoryRow key={run.id} run={run} />
         ))}
-      </div>
-    </div>
+      </Stack>
+    </PageContainer>
   );
 }

@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import { api } from "@/api/client";
 
 export default function DeployButton({ projectId }: { projectId: number }) {
@@ -22,17 +25,19 @@ export default function DeployButton({ projectId }: { projectId: number }) {
   }
 
   return (
-    <div className="flex flex-col items-end gap-1">
-      <button
-        onClick={handleClick}
-        disabled={loading}
-        className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:opacity-50"
-      >
+    <Stack spacing={0.5} sx={{ alignItems: "flex-end" }}>
+      <Button variant="contained" onClick={handleClick} disabled={loading}>
         {loading ? "Deploying..." : "Deploy"}
-      </button>
+      </Button>
       {error && (
-        <p className="max-w-xs text-right text-xs text-red-600">{error}</p>
+        <Typography
+          variant="caption"
+          color="error"
+          sx={{ textAlign: "right", maxWidth: 240 }}
+        >
+          {error}
+        </Typography>
       )}
-    </div>
+    </Stack>
   );
 }

@@ -2,6 +2,9 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import PageContainer from "@/components/PageContainer";
 import RunStepItem from "@/components/RunStepItem";
 import StatusBadge from "@/components/StatusBadge";
 import { useRunPolling } from "@/hooks/useRunPolling";
@@ -12,29 +15,43 @@ export default function RunDetailPage() {
   const { run, error } = useRunPolling(runId);
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <Link
+    <PageContainer>
+      <Typography
+        component={Link}
         href={run ? `/projects/${run.project_id}/runs` : "/"}
-        className="text-sm text-indigo-600 hover:underline"
+        variant="body2"
+        sx={{ color: "primary.main" }}
       >
         &larr; Back to run history
-      </Link>
+      </Typography>
 
-      <div className="mt-2 flex items-center gap-3">
-        <h1 className="text-2xl font-bold">Run #{runId}</h1>
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{ alignItems: "center", mt: 1 }}
+      >
+        <Typography variant="h4" sx={{ fontWeight: 700 }}>
+          Run #{runId}
+        </Typography>
         {run && <StatusBadge status={run.status} />}
-      </div>
+      </Stack>
 
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+      {error && (
+        <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+          {error}
+        </Typography>
+      )}
       {!run && !error && (
-        <p className="mt-4 text-sm text-gray-500">Loading...</p>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+          Loading...
+        </Typography>
       )}
 
-      <div className="mt-6 flex flex-col gap-3">
+      <Stack spacing={1.5} sx={{ mt: 3 }}>
         {run?.step_runs.map((step) => (
           <RunStepItem key={step.id} step={step} />
         ))}
-      </div>
-    </div>
+      </Stack>
+    </PageContainer>
   );
 }

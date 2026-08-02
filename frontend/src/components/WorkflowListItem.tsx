@@ -1,6 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Chip from "@mui/material/Chip";
+import Button from "@mui/material/Button";
 import type { Workflow } from "@/types";
 
 export default function WorkflowListItem({
@@ -11,33 +18,55 @@ export default function WorkflowListItem({
   onDelete: () => void;
 }) {
   return (
-    <div className="flex flex-col gap-2 rounded-lg border border-black/10 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-white/10">
-      <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-2">
-          <Link
-            href={`/workflows/${workflow.id}`}
-            className="truncate font-semibold hover:underline"
+    <Card variant="outlined">
+      <CardContent>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={1.5}
+          sx={{
+            alignItems: { sm: "center" },
+            justifyContent: { sm: "space-between" },
+          }}
+        >
+          <Box sx={{ minWidth: 0 }}>
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{ alignItems: "center", flexWrap: "wrap" }}
+            >
+              <Typography
+                component={Link}
+                href={`/workflows/${workflow.id}`}
+                sx={{
+                  fontWeight: 600,
+                  color: "text.primary",
+                  textDecoration: "none",
+                }}
+              >
+                {workflow.name}
+              </Typography>
+              {workflow.is_template && <Chip size="small" label="Template" />}
+            </Stack>
+            {workflow.description && (
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ mt: 0.5 }}
+              >
+                {workflow.description}
+              </Typography>
+            )}
+          </Box>
+          <Button
+            size="small"
+            color="error"
+            onClick={onDelete}
+            sx={{ alignSelf: { xs: "flex-start", sm: "auto" } }}
           >
-            {workflow.name}
-          </Link>
-          {workflow.is_template && (
-            <span className="rounded-full bg-black/5 px-2 py-0.5 text-xs text-gray-600 dark:bg-white/10 dark:text-gray-300">
-              Template
-            </span>
-          )}
-        </div>
-        {workflow.description && (
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {workflow.description}
-          </p>
-        )}
-      </div>
-      <button
-        onClick={onDelete}
-        className="self-start text-xs text-red-600 hover:underline sm:self-auto"
-      >
-        Delete
-      </button>
-    </div>
+            Delete
+          </Button>
+        </Stack>
+      </CardContent>
+    </Card>
   );
 }
