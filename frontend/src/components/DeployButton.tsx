@@ -30,7 +30,9 @@ export default function DeployButton({ projectId }: { projectId: number }) {
       >
         {loading ? "Deploying..." : "Deploy"}
       </button>
-      {error && <p className="max-w-xs text-right text-xs text-red-600">{error}</p>}
+      {error && (
+        <p className="max-w-xs text-right text-xs text-red-600">{error}</p>
+      )}
     </div>
   );
 }

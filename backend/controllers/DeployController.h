@@ -2,13 +2,12 @@
 
 #include <drogon/HttpController.h>
 
-namespace deploybutton
-{
-class DeployController : public drogon::HttpController<DeployController>
-{
+namespace deploybutton {
+class DeployController : public drogon::HttpController<DeployController> {
 public:
     METHOD_LIST_BEGIN
-    ADD_METHOD_TO(DeployController::deploy, "/api/projects/{1}/deploy", drogon::Post);
+    ADD_METHOD_TO(DeployController::deploy, "/api/projects/{1}/deploy",
+                  drogon::Post);
     METHOD_LIST_END
 
     void deploy(const drogon::HttpRequestPtr &req,
