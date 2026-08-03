@@ -35,12 +35,15 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Runtime shared libs for the binary itself, plus the tools the workflow
 # engine's steps shell out to: git (git_pull), node/npm (npm_install/npm_build),
-# the docker CLI (docker_build / talking to the host daemon via a mounted socket),
-# and python3/pip/venv for projects with their own Python-based deploy scripts
-# (e.g. metabuilder's deployment.py).
+# the docker CLI plus the compose v2 plugin (docker_build, and any project's
+# own `docker compose ...` deploy commands — docker.io alone only gives you
+# the base CLI, not the `compose` subcommand), and python3/pip/venv for
+# projects with their own Python-based deploy scripts (e.g. metabuilder's
+# deployment.py).
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates libssl3 zlib1g libuuid1 libc-ares2 libsqlite3-0 \
-        git curl nodejs npm docker.io python3 python3-pip python3-venv \
+        git curl nodejs npm docker.io docker-compose-v2 \
+        python3 python3-pip python3-venv \
     && rm -rf /var/lib/apt/lists/*
 
 # A venv (rather than --break-system-packages) so project deploy scripts can
