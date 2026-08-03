@@ -1,0 +1,34 @@
+@use "../styles/mixins" as *;
+@use "../styles/breakpoints" as *;
+
+.row {
+  @include flex-responsive(12px, space-between);
+}
+
+.info {
+  min-width: 0;
+}
+
+.nameRow {
+  @include flex-row(8px);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.name {
+  font-weight: 600;
+  color: var(--mui-palette-text-primary);
+  text-decoration: none;
+}
+
+.description {
+  margin-top: 4px;
+}
+
+.deleteButton {
+  align-self: flex-start;
+
+  @include sm-up {
+    align-self: auto;
+  }
+}

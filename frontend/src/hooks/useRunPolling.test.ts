@@ -1,4 +1,5 @@
 import { renderHook, waitFor } from "@testing-library/react";
+import { Providers } from "@/test-utils/renderWithProviders";
 import { useRunPolling } from "./useRunPolling";
 import { api } from "@/api/client";
 
@@ -9,7 +10,9 @@ describe("useRunPolling", () => {
 
   it("fetches once and stops polling when the run is terminal", async () => {
     (api.getRun as jest.Mock).mockResolvedValue({ status: "success" });
-    const { result } = renderHook(() => useRunPolling(1));
+    const { result } = renderHook(() => useRunPolling(1), {
+      wrapper: Providers,
+    });
     await waitFor(() =>
       expect(result.current.run).toEqual({ status: "success" }),
     );
@@ -21,7 +24,9 @@ describe("useRunPolling", () => {
       .mockResolvedValueOnce({ status: "running" })
       .mockResolvedValueOnce({ status: "success" });
 
-    const { result } = renderHook(() => useRunPolling(1));
+    const { result } = renderHook(() => useRunPolling(1), {
+      wrapper: Providers,
+    });
     await waitFor(
       () => expect(result.current.run).toEqual({ status: "success" }),
       { timeout: 3000 },
@@ -31,13 +36,17 @@ describe("useRunPolling", () => {
 
   it("sets an error message when the request fails", async () => {
     (api.getRun as jest.Mock).mockRejectedValue(new Error("down"));
-    const { result } = renderHook(() => useRunPolling(1));
+    const { result } = renderHook(() => useRunPolling(1), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.error).toBe("down"));
   });
 
   it("does not update state after unmount", async () => {
     (api.getRun as jest.Mock).mockResolvedValue({ status: "running" });
-    const { unmount } = renderHook(() => useRunPolling(1));
+    const { unmount } = renderHook(() => useRunPolling(1), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(api.getRun).toHaveBeenCalledTimes(1));
     expect(() => unmount()).not.toThrow();
   });
@@ -49,7 +58,9 @@ describe("useRunPolling", () => {
         resolvePoll = resolve;
       }),
     );
-    const { result, unmount } = renderHook(() => useRunPolling(1));
+    const { result, unmount } = renderHook(() => useRunPolling(1), {
+      wrapper: Providers,
+    });
     unmount();
     resolvePoll({ status: "success" });
     await new Promise((r) => setTimeout(r, 0));
@@ -63,7 +74,9 @@ describe("useRunPolling", () => {
         rejectPoll = reject;
       }),
     );
-    const { result, unmount } = renderHook(() => useRunPolling(1));
+    const { result, unmount } = renderHook(() => useRunPolling(1), {
+      wrapper: Providers,
+    });
     unmount();
     rejectPoll(new Error("down"));
     await new Promise((r) => setTimeout(r, 0));

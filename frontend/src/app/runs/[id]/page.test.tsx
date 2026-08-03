@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithProviders } from "@/test-utils/renderWithProviders";
 import RunDetailPage from "./page";
 import { api } from "@/api/client";
 
@@ -35,13 +36,13 @@ describe("RunDetailPage", () => {
 
   it("shows Loading before the run has resolved", () => {
     (api.getRun as jest.Mock).mockReturnValue(new Promise(() => {}));
-    render(<RunDetailPage />);
+    renderWithProviders(<RunDetailPage />);
     expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 
   it("renders the run status and step output", async () => {
     (api.getRun as jest.Mock).mockResolvedValue(runDetail);
-    render(<RunDetailPage />);
+    renderWithProviders(<RunDetailPage />);
 
     expect(screen.getByText("Run #7")).toBeInTheDocument();
     expect(await screen.findByText("Pull")).toBeInTheDocument();
@@ -50,14 +51,14 @@ describe("RunDetailPage", () => {
 
   it("links back to the project's run history once loaded", async () => {
     (api.getRun as jest.Mock).mockResolvedValue(runDetail);
-    render(<RunDetailPage />);
+    renderWithProviders(<RunDetailPage />);
     const link = await screen.findByText("← Back to run history");
     expect(link).toHaveAttribute("href", "/projects/3/runs");
   });
 
   it("shows an error message when loading fails", async () => {
     (api.getRun as jest.Mock).mockRejectedValue(new Error("down"));
-    render(<RunDetailPage />);
+    renderWithProviders(<RunDetailPage />);
     expect(await screen.findByText("down")).toBeInTheDocument();
   });
 });

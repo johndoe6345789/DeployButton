@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { api } from "@/api/client";
 import type { Project } from "@/types";
 
 export function useProjects() {
+  const t = useTranslations("common");
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -13,7 +15,9 @@ export function useProjects() {
     api
       .listProjects()
       .then(setProjects)
-      .catch((e) => setError(e instanceof Error ? e.message : "Failed to load"))
+      .catch((e) =>
+        setError(e instanceof Error ? e.message : t("failedToLoad")),
+      )
       .finally(() => setLoading(false));
   }
 

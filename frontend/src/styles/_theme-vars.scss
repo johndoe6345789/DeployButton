@@ -1,0 +1,14 @@
+// Aliases for the CSS custom properties MUI's cssVariables theme (see
+// src/theme/theme.ts) generates, so plain SCSS Modules can stay in sync
+// with the MUI palette (including automatic light/dark switching) instead
+// of hardcoding colors.
+$text-primary: var(--mui-palette-text-primary);
+$text-secondary: var(--mui-palette-text-secondary);
+$divider: var(--mui-palette-divider);
+$primary-main: var(--mui-palette-primary-main);
+$error-main: var(--mui-palette-error-main);
+$success-main: var(--mui-palette-success-main);
+$action-hover: var(--mui-palette-action-hover);
+$background-paper: var(--mui-palette-background-paper);
+$spacing-unit: var(--mui-spacing);
+$radius: var(--mui-shape-borderRadius);

@@ -1,10 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithProviders } from "@/test-utils/renderWithProviders";
 import ShellFields from "./ShellFields";
 
 describe("ShellFields", () => {
   it("renders cwd and command values", () => {
-    render(
+    renderWithProviders(
       <ShellFields
         config={{ cwd: "/srv/app", command: "echo hi" }}
         onChange={jest.fn()}
@@ -16,14 +17,14 @@ describe("ShellFields", () => {
 
   it("calls onChange with the updated command", async () => {
     const onChange = jest.fn();
-    render(<ShellFields config={{}} onChange={onChange} />);
+    renderWithProviders(<ShellFields config={{}} onChange={onChange} />);
     await userEvent.type(screen.getByPlaceholderText("echo hello"), "x");
     expect(onChange).toHaveBeenCalledWith({ command: "x" });
   });
 
   it("calls onChange with the updated working directory", async () => {
     const onChange = jest.fn();
-    render(<ShellFields config={{}} onChange={onChange} />);
+    renderWithProviders(<ShellFields config={{}} onChange={onChange} />);
     await userEvent.type(
       screen.getByPlaceholderText("/srv/repos/my-app"),
       "x",

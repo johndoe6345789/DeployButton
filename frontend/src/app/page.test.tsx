@@ -1,7 +1,8 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Dashboard from "./page";
 import { api } from "@/api/client";
+import { renderWithProviders } from "@/test-utils/renderWithProviders";
 
 jest.mock("@/api/client", () => ({
   api: {
@@ -35,7 +36,7 @@ describe("Dashboard", () => {
 
   it("shows the empty state when there are no projects", async () => {
     (api.listProjects as jest.Mock).mockResolvedValue([]);
-    render(<Dashboard />);
+    renderWithProviders(<Dashboard />);
     expect(
       await screen.findByText("No projects yet. Create one to get started."),
     ).toBeInTheDocument();
@@ -43,23 +44,27 @@ describe("Dashboard", () => {
 
   it("renders a project card for each project", async () => {
     (api.listProjects as jest.Mock).mockResolvedValue([project]);
-    render(<Dashboard />);
+    renderWithProviders(<Dashboard />);
     expect(await screen.findByText("My App")).toBeInTheDocument();
   });
 
   it("shows an error message when loading fails", async () => {
     (api.listProjects as jest.Mock).mockRejectedValue(new Error("down"));
-    render(<Dashboard />);
-    expect(await screen.findByText("down")).toBeInTheDocument();
+    renderWithProviders(<Dashboard />);
+    expect(await screen.findByTestId("dashboard-error")).toHaveTextContent(
+      "down",
+    );
   });
 
   it("opens the New Project modal and refreshes on creation", async () => {
     (api.listProjects as jest.Mock).mockResolvedValue([]);
-    render(<Dashboard />);
+    renderWithProviders(<Dashboard />);
     await screen.findByText("No projects yet. Create one to get started.");
 
-    await userEvent.click(screen.getByText("New Project"));
-    expect(screen.getByText("New Project", { selector: "h2" })).toBeInTheDocument();
+    await userEvent.click(screen.getByTestId("new-project-button"));
+    expect(
+      screen.getByText("New Project", { selector: "h2" }),
+    ).toBeInTheDocument();
 
     await userEvent.click(screen.getByText("Cancel"));
     await waitFor(() =>
@@ -77,10 +82,10 @@ describe("Dashboard", () => {
       { id: 1, name: "React", description: "", is_template: true },
     ]);
     (api.createProject as jest.Mock).mockResolvedValue(project);
-    render(<Dashboard />);
+    renderWithProviders(<Dashboard />);
     await screen.findByText("No projects yet. Create one to get started.");
 
-    await userEvent.click(screen.getByText("New Project"));
+    await userEvent.click(screen.getByTestId("new-project-button"));
     await screen.findByText("React");
     await userEvent.type(screen.getByLabelText(/^Name$/), "My App");
     await userEvent.type(screen.getByLabelText(/Slug/), "my-app");

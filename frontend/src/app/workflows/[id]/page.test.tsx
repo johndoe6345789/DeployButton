@@ -1,5 +1,6 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithProviders } from "@/test-utils/renderWithProviders";
 import WorkflowEditor from "./page";
 import { api } from "@/api/client";
 
@@ -36,7 +37,7 @@ describe("WorkflowEditor page", () => {
 
   it("shows a loading state, then the loaded workflow", async () => {
     (api.getWorkflow as jest.Mock).mockResolvedValue(makeWorkflow());
-    render(<WorkflowEditor />);
+    renderWithProviders(<WorkflowEditor />);
     expect(screen.getByText("Loading...")).toBeInTheDocument();
     expect(await screen.findByDisplayValue("My Workflow")).toBeInTheDocument();
     expect(screen.getByDisplayValue("Step 1")).toBeInTheDocument();
@@ -46,7 +47,7 @@ describe("WorkflowEditor page", () => {
     (api.getWorkflow as jest.Mock).mockResolvedValue(makeWorkflow());
     (api.updateWorkflow as jest.Mock).mockResolvedValue({});
     (api.updateWorkflowSteps as jest.Mock).mockResolvedValue({});
-    render(<WorkflowEditor />);
+    renderWithProviders(<WorkflowEditor />);
     await screen.findByDisplayValue("My Workflow");
 
     await userEvent.click(screen.getByText("Save"));
@@ -55,7 +56,7 @@ describe("WorkflowEditor page", () => {
 
   it("removes a step from the list", async () => {
     (api.getWorkflow as jest.Mock).mockResolvedValue(makeWorkflow());
-    render(<WorkflowEditor />);
+    renderWithProviders(<WorkflowEditor />);
     await screen.findByDisplayValue("Step 1");
 
     await userEvent.click(screen.getByText("Remove"));
@@ -67,7 +68,7 @@ describe("WorkflowEditor page", () => {
 
   it("navigates back to the workflow list when Done is clicked", async () => {
     (api.getWorkflow as jest.Mock).mockResolvedValue(makeWorkflow());
-    render(<WorkflowEditor />);
+    renderWithProviders(<WorkflowEditor />);
     await screen.findByDisplayValue("My Workflow");
 
     await userEvent.click(screen.getByText("Done"));
@@ -76,7 +77,7 @@ describe("WorkflowEditor page", () => {
 
   it("edits a step's name in place", async () => {
     (api.getWorkflow as jest.Mock).mockResolvedValue(makeWorkflow());
-    render(<WorkflowEditor />);
+    renderWithProviders(<WorkflowEditor />);
     const stepName = await screen.findByDisplayValue("Step 1");
 
     await userEvent.type(stepName, "!");
@@ -85,7 +86,7 @@ describe("WorkflowEditor page", () => {
 
   it("adds a new step via the Add Step menu", async () => {
     (api.getWorkflow as jest.Mock).mockResolvedValue(makeWorkflow());
-    render(<WorkflowEditor />);
+    renderWithProviders(<WorkflowEditor />);
     await screen.findByDisplayValue("Step 1");
 
     await userEvent.click(screen.getByText("Add Step"));

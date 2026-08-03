@@ -1,20 +1,23 @@
 "use client";
 
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 import StatusBadge from "./StatusBadge";
 import type { StepRun } from "@/types";
+import styles from "./RunStepItem.module.scss";
 
 export default function RunStepItem({ step }: { step: StepRun }) {
   return (
-    <div className="rounded-md border border-black/10 dark:border-white/10">
-      <div className="flex items-center justify-between border-b border-black/10 px-3 py-2 dark:border-white/10">
-        <span className="text-sm font-medium">{step.name}</span>
+    <Paper variant="outlined" data-testid="run-step-item">
+      <div className={styles.header}>
+        <Typography variant="body2" className={styles.name}>
+          {step.name}
+        </Typography>
         <StatusBadge status={step.status} />
       </div>
       {step.output && (
-        <pre className="max-h-64 overflow-auto whitespace-pre-wrap p-3 text-xs text-gray-700 dark:text-gray-300">
-          {step.output}
-        </pre>
+        <pre className={styles.output}>{step.output}</pre>
       )}
-    </div>
+    </Paper>
   );
 }

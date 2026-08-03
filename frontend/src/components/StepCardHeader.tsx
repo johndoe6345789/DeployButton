@@ -1,6 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
+import Chip from "@mui/material/Chip";
+import Button from "@mui/material/Button";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import type { EditableStep } from "@/types";
+import styles from "./StepCardHeader.module.scss";
 
 export default function StepCardHeader({
   step,
@@ -19,35 +26,46 @@ export default function StepCardHeader({
   onRemove: () => void;
   dragHandleProps: Record<string, unknown>;
 }) {
+  const t = useTranslations("workflowEditor");
+
   return (
-    <div className="flex items-center gap-2 p-2">
-      <button
-        {...dragHandleProps}
-        className="cursor-grab px-1 text-gray-400 active:cursor-grabbing"
-        aria-label="Drag to reorder"
-      >
-        ⠿
-      </button>
-      <input
-        className="flex-1 rounded-md border border-transparent bg-transparent px-1 py-0.5 text-sm font-medium hover:border-black/10 focus:border-black/20 dark:hover:border-white/10"
-        value={step.name}
-        onChange={(e) => onNameChange(e.target.value)}
-      />
-      <span className="rounded-full bg-black/5 px-2 py-0.5 text-xs text-gray-600 dark:bg-white/10 dark:text-gray-300">
-        {typeLabel}
-      </span>
-      <button
-        onClick={onToggleExpanded}
-        className="text-xs text-gray-500 hover:underline"
-      >
-        {expanded ? "Collapse" : "Configure"}
-      </button>
-      <button
-        onClick={onRemove}
-        className="text-xs text-red-600 hover:underline"
-      >
-        Remove
-      </button>
+    <div className={styles.header} data-testid="step-card-header">
+      <div className={styles.nameRow}>
+        <IconButton
+          {...dragHandleProps}
+          size="small"
+          aria-label={t("dragToReorder")}
+          data-testid="step-drag-handle"
+        >
+          <DragIndicatorIcon fontSize="small" />
+        </IconButton>
+        <TextField
+          size="small"
+          variant="standard"
+          fullWidth
+          value={step.name}
+          onChange={(e) => onNameChange(e.target.value)}
+          slotProps={{ htmlInput: { "data-testid": "step-name-input" } }}
+        />
+      </div>
+      <div className={styles.actions}>
+        <Chip size="small" label={typeLabel} data-testid="step-type-chip" />
+        <Button
+          size="small"
+          onClick={onToggleExpanded}
+          data-testid="step-toggle-configure"
+        >
+          {expanded ? t("collapse") : t("configure")}
+        </Button>
+        <Button
+          size="small"
+          color="error"
+          onClick={onRemove}
+          data-testid="step-remove"
+        >
+          {t("remove")}
+        </Button>
+      </div>
     </div>
   );
 }

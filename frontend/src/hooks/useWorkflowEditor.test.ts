@@ -1,5 +1,6 @@
 import { renderHook, waitFor, act } from "@testing-library/react";
 import type { DragEndEvent } from "@dnd-kit/core";
+import { Providers } from "@/test-utils/renderWithProviders";
 import { useWorkflowEditor } from "./useWorkflowEditor";
 import { api } from "@/api/client";
 
@@ -33,7 +34,9 @@ describe("useWorkflowEditor", () => {
 
   it("loads the workflow and maps steps to editable steps", async () => {
     (api.getWorkflow as jest.Mock).mockResolvedValue(makeWorkflow());
-    const { result } = renderHook(() => useWorkflowEditor(1));
+    const { result } = renderHook(() => useWorkflowEditor(1), {
+      wrapper: Providers,
+    });
 
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.name).toBe("W");
@@ -51,21 +54,27 @@ describe("useWorkflowEditor", () => {
       is_template: false,
       steps: [],
     });
-    const { result } = renderHook(() => useWorkflowEditor(1));
+    const { result } = renderHook(() => useWorkflowEditor(1), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.description).toBe("");
   });
 
   it("sets an error when loading fails", async () => {
     (api.getWorkflow as jest.Mock).mockRejectedValue(new Error("down"));
-    const { result } = renderHook(() => useWorkflowEditor(1));
+    const { result } = renderHook(() => useWorkflowEditor(1), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.error).toBe("down");
   });
 
   it("reorders steps on drag end", async () => {
     (api.getWorkflow as jest.Mock).mockResolvedValue(makeWorkflow());
-    const { result } = renderHook(() => useWorkflowEditor(1));
+    const { result } = renderHook(() => useWorkflowEditor(1), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.loading).toBe(false));
 
     act(() => {
@@ -80,7 +89,9 @@ describe("useWorkflowEditor", () => {
 
   it("ignores drag end when there is no drop target", async () => {
     (api.getWorkflow as jest.Mock).mockResolvedValue(makeWorkflow());
-    const { result } = renderHook(() => useWorkflowEditor(1));
+    const { result } = renderHook(() => useWorkflowEditor(1), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.loading).toBe(false));
 
     act(() => {
@@ -97,7 +108,9 @@ describe("useWorkflowEditor", () => {
     (api.getWorkflow as jest.Mock).mockResolvedValue(makeWorkflow());
     (api.updateWorkflow as jest.Mock).mockResolvedValue({});
     (api.updateWorkflowSteps as jest.Mock).mockResolvedValue({});
-    const { result } = renderHook(() => useWorkflowEditor(1));
+    const { result } = renderHook(() => useWorkflowEditor(1), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.loading).toBe(false));
 
     await act(async () => {
@@ -118,7 +131,9 @@ describe("useWorkflowEditor", () => {
   it("sets an error and clears saving state when save fails", async () => {
     (api.getWorkflow as jest.Mock).mockResolvedValue(makeWorkflow());
     (api.updateWorkflow as jest.Mock).mockRejectedValue(new Error("nope"));
-    const { result } = renderHook(() => useWorkflowEditor(1));
+    const { result } = renderHook(() => useWorkflowEditor(1), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.loading).toBe(false));
 
     await act(async () => {
@@ -132,7 +147,9 @@ describe("useWorkflowEditor", () => {
   it("uses a fallback error when save fails with a non-Error", async () => {
     (api.getWorkflow as jest.Mock).mockResolvedValue(makeWorkflow());
     (api.updateWorkflow as jest.Mock).mockRejectedValue("boom");
-    const { result } = renderHook(() => useWorkflowEditor(1));
+    const { result } = renderHook(() => useWorkflowEditor(1), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.loading).toBe(false));
 
     await act(async () => {

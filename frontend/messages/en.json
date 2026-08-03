@@ -1,0 +1,121 @@
+{
+  "common": {
+    "appName": "DeployButton",
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "save": "Save",
+    "saving": "Saving...",
+    "saved": "Saved.",
+    "done": "Done",
+    "create": "Create",
+    "creating": "Creating...",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode",
+    "failedToLoad": "Failed to load"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "es": "Spanish"
+  },
+  "statusBadge": {
+    "running": "Running",
+    "success": "Success",
+    "failed": "Failed",
+    "skipped": "Skipped",
+    "none": "Never run"
+  },
+  "dashboard": {
+    "title": "DeployButton",
+    "subtitle": "One-click deploys for your apps.",
+    "workflowsLink": "Workflows",
+    "newProject": "New Project",
+    "noProjects": "No projects yet. Create one to get started."
+  },
+  "deployButton": {
+    "deploy": "Deploy",
+    "deploying": "Deploying...",
+    "failed": "Deploy failed"
+  },
+  "projectCard": {
+    "lastRun": "last run {time}",
+    "secondsAgo": "{n}s ago",
+    "minutesAgo": "{n}m ago",
+    "hoursAgo": "{n}h ago",
+    "daysAgo": "{n}d ago"
+  },
+  "newProjectModal": {
+    "title": "New Project",
+    "name": "Name",
+    "slug": "Slug (used in the webhook URL)",
+    "slugPlaceholder": "my-app",
+    "repoUrl": "Repo URL",
+    "repoUrlPlaceholder": "github.com/you/my-app",
+    "workflow": "Workflow",
+    "failedToLoad": "Failed to load workflows",
+    "chooseWorkflow": "Choose a workflow",
+    "failedToCreate": "Failed to create project"
+  },
+  "workflowsList": {
+    "title": "Workflows",
+    "backToDashboard": "Back to dashboard",
+    "newWorkflow": "New Workflow",
+    "template": "Template",
+    "delete": "Delete",
+    "defaultWorkflowName": "New Workflow",
+    "confirmDelete": "Delete this workflow?"
+  },
+  "stepTypes": {
+    "git_pull": "Git pull",
+    "shell": "Shell command",
+    "npm_install": "Install dependencies",
+    "npm_build": "Build (npm/yarn/pnpm)",
+    "docker_build": "Docker build",
+    "http_webhook": "HTTP webhook call",
+    "delay": "Delay",
+    "notify": "Notify"
+  },
+  "workflowEditor": {
+    "backToWorkflows": "Back to workflows",
+    "descriptionPlaceholder": "Description",
+    "stepsHeading": "Steps",
+    "addStep": "Add Step",
+    "noSteps": "No steps yet. Add one above.",
+    "configure": "Configure",
+    "collapse": "Collapse",
+    "remove": "Remove",
+    "dragToReorder": "Drag to reorder",
+    "failedToSave": "Failed to save"
+  },
+  "runDetail": {
+    "backToRunHistory": "Back to run history",
+    "runNumber": "Run #{id}"
+  },
+  "runHistory": {
+    "title": "Run History",
+    "titleWithProject": "{name} — Run History",
+    "backToDashboard": "Back to dashboard",
+    "noRuns": "No runs yet.",
+    "manual": "Manual",
+    "githubWebhook": "GitHub webhook"
+  },
+  "stepFields": {
+    "workingDirectory": "Working directory",
+    "workingDirectoryPlaceholder": "/srv/repos/my-app",
+    "command": "Command",
+    "commandPlaceholder": "echo hello",
+    "packageManager": "Package manager",
+    "script": "Script",
+    "imageTag": "Image tag",
+    "imageTagPlaceholder": "my-app:latest",
+    "dockerfile": "Dockerfile",
+    "url": "URL",
+    "urlPlaceholder": "https://captain.example.com/.../triggerbuild?token=...",
+    "method": "Method",
+    "body": "Body (optional)",
+    "seconds": "Seconds",
+    "message": "Message",
+    "webhookUrl": "Webhook URL (optional)"
+  }
+}

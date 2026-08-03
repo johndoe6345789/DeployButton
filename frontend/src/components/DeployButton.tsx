@@ -2,9 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import { api } from "@/api/client";
+import styles from "./DeployButton.module.scss";
 
 export default function DeployButton({ projectId }: { projectId: number }) {
+  const t = useTranslations("deployButton");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -16,22 +21,30 @@ export default function DeployButton({ projectId }: { projectId: number }) {
       const { runId } = await api.deploy(projectId);
       router.push(`/runs/${runId}`);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Deploy failed");
+      setError(e instanceof Error ? e.message : t("failed"));
       setLoading(false);
     }
   }
 
   return (
-    <div className="flex flex-col items-end gap-1">
-      <button
+    <div className={styles.wrapper}>
+      <Button
+        variant="contained"
         onClick={handleClick}
         disabled={loading}
-        className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:opacity-50"
+        data-testid="deploy-button"
       >
-        {loading ? "Deploying..." : "Deploy"}
-      </button>
+        {loading ? t("deploying") : t("deploy")}
+      </Button>
       {error && (
-        <p className="max-w-xs text-right text-xs text-red-600">{error}</p>
+        <Typography
+          variant="caption"
+          color="error"
+          className={styles.error}
+          data-testid="deploy-error"
+        >
+          {error}
+        </Typography>
       )}
     </div>
   );

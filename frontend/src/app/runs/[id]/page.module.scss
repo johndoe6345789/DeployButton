@@ -1,0 +1,25 @@
+.backLink {
+  color: var(--mui-palette-primary-main);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.title {
+  font-weight: 700;
+}
+
+.message {
+  margin-top: 16px;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}

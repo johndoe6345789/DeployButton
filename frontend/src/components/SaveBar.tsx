@@ -1,5 +1,10 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import styles from "./SaveBar.module.scss";
+
 export default function SaveBar({
   saving,
   saved,
@@ -13,23 +18,35 @@ export default function SaveBar({
   onSave: () => void;
   onDone: () => void;
 }) {
+  const t = useTranslations("common");
+
   return (
-    <div className="mt-6 flex items-center gap-3">
-      <button
+    <div className={styles.bar}>
+      <Button
+        variant="contained"
         onClick={onSave}
         disabled={saving}
-        className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-50"
+        data-testid="save-workflow-button"
       >
-        {saving ? "Saving..." : "Save"}
-      </button>
-      {saved && <span className="text-sm text-green-600">Saved.</span>}
-      {error && <span className="text-sm text-red-600">{error}</span>}
-      <button
-        onClick={onDone}
-        className="text-sm text-gray-500 hover:underline"
-      >
-        Done
-      </button>
+        {saving ? t("saving") : t("save")}
+      </Button>
+      {saved && (
+        <Typography
+          variant="body2"
+          color="success.main"
+          data-testid="save-success"
+        >
+          {t("saved")}
+        </Typography>
+      )}
+      {error && (
+        <Typography variant="body2" color="error" data-testid="save-error">
+          {error}
+        </Typography>
+      )}
+      <Button color="inherit" onClick={onDone} data-testid="done-button">
+        {t("done")}
+      </Button>
     </div>
   );
 }

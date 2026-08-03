@@ -27,6 +27,7 @@ jobs:
       - run: npx tsc --noEmit
       - run: npx eslint .
       - run: npx jest --coverage
+      - run: npm run i18n-coverage
       - run: npm run build
 
   backend-lint:

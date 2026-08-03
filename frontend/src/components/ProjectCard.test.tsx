@@ -1,6 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import ProjectCard from "./ProjectCard";
 import type { Project } from "@/types";
+import { renderWithProviders } from "@/test-utils/renderWithProviders";
 
 jest.mock("@/api/client", () => ({ api: { deploy: jest.fn() } }));
 jest.mock("next/navigation", () => ({
@@ -24,15 +25,21 @@ function makeProject(overrides: Partial<Project> = {}): Project {
 
 describe("ProjectCard", () => {
   it("renders the project name and workflow name", () => {
-    render(<ProjectCard project={makeProject()} />);
+    renderWithProviders(<ProjectCard project={makeProject()} />);
     expect(screen.getByText("My App")).toBeInTheDocument();
     expect(
       screen.getByText("React via CapRover", { exact: false }),
     ).toBeInTheDocument();
   });
 
+  it("exposes a data-testid on the card and name", () => {
+    renderWithProviders(<ProjectCard project={makeProject()} />);
+    expect(screen.getByTestId("project-card")).toBeInTheDocument();
+    expect(screen.getByTestId("project-name")).toHaveTextContent("My App");
+  });
+
   it("links to the project's run history", () => {
-    render(<ProjectCard project={makeProject()} />);
+    renderWithProviders(<ProjectCard project={makeProject()} />);
     expect(screen.getByText("My App").closest("a")).toHaveAttribute(
       "href",
       "/projects/1/runs",
@@ -44,7 +51,7 @@ describe("ProjectCard", () => {
       .toISOString()
       .replace("T", " ")
       .slice(0, 19);
-    render(
+    renderWithProviders(
       <ProjectCard
         project={makeProject({
           last_run_status: "success",
@@ -56,7 +63,7 @@ describe("ProjectCard", () => {
   });
 
   it("shows the Never run status badge when never deployed", () => {
-    render(<ProjectCard project={makeProject()} />);
+    renderWithProviders(<ProjectCard project={makeProject()} />);
     expect(screen.getByText("Never run")).toBeInTheDocument();
   });
 
@@ -65,7 +72,7 @@ describe("ProjectCard", () => {
       .toISOString()
       .replace("T", " ")
       .slice(0, 19);
-    render(
+    renderWithProviders(
       <ProjectCard
         project={makeProject({
           last_run_status: "success",
@@ -81,7 +88,7 @@ describe("ProjectCard", () => {
       .toISOString()
       .replace("T", " ")
       .slice(0, 19);
-    render(
+    renderWithProviders(
       <ProjectCard
         project={makeProject({
           last_run_status: "success",
@@ -97,7 +104,7 @@ describe("ProjectCard", () => {
       .toISOString()
       .replace("T", " ")
       .slice(0, 19);
-    render(
+    renderWithProviders(
       <ProjectCard
         project={makeProject({
           last_run_status: "running",

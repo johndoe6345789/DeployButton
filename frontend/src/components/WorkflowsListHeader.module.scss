@@ -1,0 +1,23 @@
+@use "../styles/mixins" as *;
+@use "../styles/breakpoints" as *;
+
+.header {
+  @include flex-responsive(16px, space-between);
+  margin-bottom: 24px;
+}
+
+.title {
+  font-weight: 700;
+}
+
+.backLink {
+  color: var(--mui-palette-primary-main);
+}
+
+.createButton {
+  align-self: flex-start;
+
+  @include sm-up {
+    align-self: auto;
+  }
+}

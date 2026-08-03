@@ -1,0 +1,26 @@
+@use "../styles/breakpoints" as *;
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  text-decoration: none;
+
+  @include sm-up {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &:hover {
+    background-color: var(--mui-palette-action-hover);
+  }
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}

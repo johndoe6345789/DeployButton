@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import Paper from "@mui/material/Paper";
 import type { EditableStep } from "@/types";
-import { STEP_TYPES } from "@/types";
 import StepCardHeader from "./StepCardHeader";
 import StepConfigForm from "./StepConfigForm";
+import styles from "./StepCard.module.scss";
 
 export default function StepCard({
   step,
@@ -17,6 +19,7 @@ export default function StepCard({
   onChange: (step: EditableStep) => void;
   onRemove: () => void;
 }) {
+  const t = useTranslations("stepTypes");
   const [expanded, setExpanded] = useState(false);
   const {
     attributes,
@@ -33,15 +36,10 @@ export default function StepCard({
     opacity: isDragging ? 0.5 : 1,
   };
 
-  const typeLabel =
-    STEP_TYPES.find((t) => t.value === step.type)?.label ?? step.type;
+  const typeLabel = t.has(step.type) ? t(step.type) : step.type;
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="rounded-md border border-black/10 bg-white dark:border-white/10 dark:bg-neutral-900"
-    >
+    <Paper ref={setNodeRef} style={style} variant="outlined">
       <StepCardHeader
         step={step}
         typeLabel={typeLabel}
@@ -52,7 +50,7 @@ export default function StepCard({
         dragHandleProps={{ ...attributes, ...listeners }}
       />
       {expanded && (
-        <div className="border-t border-black/10 p-3 dark:border-white/10">
+        <div className={styles.body}>
           <StepConfigForm
             type={step.type}
             config={step.config}
@@ -60,6 +58,6 @@ export default function StepCard({
           />
         </div>
       )}
-    </div>
+    </Paper>
   );
 }

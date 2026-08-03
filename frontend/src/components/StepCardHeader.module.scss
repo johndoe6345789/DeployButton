@@ -1,0 +1,34 @@
+@use "../styles/breakpoints" as *;
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+
+  @include sm-up {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.nameRow {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  flex: 1;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-left: 40px;
+
+  @include sm-up {
+    padding-left: 0;
+  }
+}

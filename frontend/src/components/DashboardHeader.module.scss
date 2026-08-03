@@ -1,0 +1,14 @@
+@use "../styles/mixins" as *;
+
+.header {
+  @include flex-responsive(16px, space-between);
+  margin-bottom: 24px;
+}
+
+.title {
+  font-weight: 700;
+}
+
+.actions {
+  @include flex-row(8px);
+}

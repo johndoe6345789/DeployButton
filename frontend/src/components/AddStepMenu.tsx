@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import type { EditableStep, StepType } from "@/types";
 import { STEP_TYPES } from "@/types";
-
-function defaultName(type: StepType): string {
-  return STEP_TYPES.find((t) => t.value === type)?.label ?? type;
-}
+import styles from "./AddStepMenu.module.scss";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function defaultConfig(type: StepType): Record<string, any> {
@@ -31,34 +31,40 @@ export default function AddStepMenu({
 }: {
   onAdd: (step: EditableStep) => void;
 }) {
+  const t = useTranslations("stepTypes");
+  const tEditor = useTranslations("workflowEditor");
   const [type, setType] = useState<StepType>("shell");
 
   return (
-    <div className="flex items-center gap-2">
-      <select
-        className="rounded-md border border-black/20 px-2 py-1 text-sm dark:border-white/20 dark:bg-neutral-800"
+    <div className={styles.menu}>
+      <TextField
+        select
+        size="small"
+        slotProps={{ select: { native: true } }}
         value={type}
         onChange={(e) => setType(e.target.value as StepType)}
+        data-testid="add-step-type"
       >
-        {STEP_TYPES.map((t) => (
-          <option key={t.value} value={t.value}>
-            {t.label}
+        {STEP_TYPES.map((s) => (
+          <option key={s.value} value={s.value}>
+            {t(s.value)}
           </option>
         ))}
-      </select>
-      <button
+      </TextField>
+      <Button
+        variant="contained"
+        data-testid="add-step-button"
         onClick={() =>
           onAdd({
             key: crypto.randomUUID(),
-            name: defaultName(type),
+            name: t(type),
             type,
             config: defaultConfig(type),
           })
         }
-        className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-500"
       >
-        Add Step
-      </button>
+        {tEditor("addStep")}
+      </Button>
     </div>
   );
 }

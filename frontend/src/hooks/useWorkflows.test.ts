@@ -1,6 +1,7 @@
 import { renderHook, waitFor, act } from "@testing-library/react";
 import { useWorkflows } from "./useWorkflows";
 import { api } from "@/api/client";
+import { Providers } from "@/test-utils/renderWithProviders";
 
 jest.mock("@/api/client", () => ({ api: { listWorkflows: jest.fn() } }));
 
@@ -9,7 +10,9 @@ describe("useWorkflows", () => {
 
   it("loads workflows on mount", async () => {
     (api.listWorkflows as jest.Mock).mockResolvedValue([{ id: 1 }]);
-    const { result } = renderHook(() => useWorkflows());
+    const { result } = renderHook(() => useWorkflows(), {
+      wrapper: Providers,
+    });
 
     expect(result.current.loading).toBe(true);
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -18,14 +21,18 @@ describe("useWorkflows", () => {
 
   it("sets an error message when loading fails", async () => {
     (api.listWorkflows as jest.Mock).mockRejectedValue(new Error("down"));
-    const { result } = renderHook(() => useWorkflows());
+    const { result } = renderHook(() => useWorkflows(), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.error).toBe("down");
   });
 
   it("uses a fallback error message for a non-Error rejection", async () => {
     (api.listWorkflows as jest.Mock).mockRejectedValue("boom");
-    const { result } = renderHook(() => useWorkflows());
+    const { result } = renderHook(() => useWorkflows(), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.error).toBe("Failed to load");
   });
@@ -34,7 +41,9 @@ describe("useWorkflows", () => {
     (api.listWorkflows as jest.Mock)
       .mockResolvedValueOnce([{ id: 1 }])
       .mockResolvedValueOnce([{ id: 1 }, { id: 2 }]);
-    const { result } = renderHook(() => useWorkflows());
+    const { result } = renderHook(() => useWorkflows(), {
+      wrapper: Providers,
+    });
     await waitFor(() => expect(result.current.workflows).toHaveLength(1));
 
     act(() => result.current.refresh());

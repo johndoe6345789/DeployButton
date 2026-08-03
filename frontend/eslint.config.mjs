@@ -7,10 +7,13 @@ const eslintConfig = defineConfig([
   ...nextTs,
   {
     rules: {
-      // 80-line files / 80-column width, project convention. Tailwind
-      // className strings are exempt from the width check (ignoreStrings)
-      // since a single unbroken class list can't be wrapped like code can.
-      "max-lines": ["error", { max: 80, skipBlankLines: false, skipComments: false }],
+      // 80-line files / 80-column width, project convention. Long string
+      // literals (e.g. URLs) are exempt from the width check since they
+      // can't be wrapped like code can.
+      "max-lines": [
+        "error",
+        { max: 80, skipBlankLines: false, skipComments: false },
+      ],
       "max-len": [
         "error",
         {
@@ -27,6 +30,15 @@ const eslintConfig = defineConfig([
     files: ["**/*.test.{ts,tsx}", "jest.setup.ts"],
     rules: {
       "max-lines": "off",
+    },
+  },
+  {
+    // Tooling scripts, not application code -- same exemption as
+    // jest.config.ts below.
+    files: ["scripts/**"],
+    rules: {
+      "max-lines": "off",
+      "max-len": "off",
     },
   },
   // Override default ignores of eslint-config-next.

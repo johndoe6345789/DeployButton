@@ -1,34 +1,40 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import styles from "./DashboardHeader.module.scss";
 
 export default function DashboardHeader({
   onNewProject,
 }: {
   onNewProject: () => void;
 }) {
+  const t = useTranslations("dashboard");
+
   return (
-    <div className="mb-6 flex items-center justify-between">
+    <header className={styles.header}>
       <div>
-        <h1 className="text-2xl font-bold">DeployButton</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          One-click deploys for your apps.
-        </p>
+        <Typography variant="h4" className={styles.title}>
+          {t("title")}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {t("subtitle")}
+        </Typography>
       </div>
-      <div className="flex gap-2">
-        <Link
-          href="/workflows"
-          className="rounded-md px-3 py-1.5 text-sm font-semibold hover:bg-black/5 dark:hover:bg-white/10"
-        >
-          Workflows
-        </Link>
-        <button
+      <div className={styles.actions}>
+        <Button component={Link} href="/workflows" color="inherit">
+          {t("workflowsLink")}
+        </Button>
+        <Button
+          variant="contained"
           onClick={onNewProject}
-          className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-500"
+          data-testid="new-project-button"
         >
-          New Project
-        </button>
+          {t("newProject")}
+        </Button>
       </div>
-    </div>
+    </header>
   );
 }

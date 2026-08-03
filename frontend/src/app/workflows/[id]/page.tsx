@@ -2,13 +2,19 @@
 
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import Typography from "@mui/material/Typography";
+import PageContainer from "@/components/PageContainer";
 import WorkflowEditorHeader from "@/components/WorkflowEditorHeader";
 import StepsList from "@/components/StepsList";
 import SaveBar from "@/components/SaveBar";
 import { useWorkflowEditor } from "@/hooks/useWorkflowEditor";
 import type { EditableStep } from "@/types";
+import styles from "./page.module.scss";
 
 export default function WorkflowEditor() {
+  const t = useTranslations("workflowEditor");
+  const tc = useTranslations("common");
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const workflowId = Number(params.id);
@@ -24,20 +30,25 @@ export default function WorkflowEditor() {
 
   if (editor.loading) {
     return (
-      <div className="mx-auto max-w-3xl px-6 py-10 text-sm text-gray-500">
-        Loading...
-      </div>
+      <PageContainer>
+        <Typography variant="body2" color="text.secondary">
+          {tc("loading")}
+        </Typography>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-10">
-      <Link
+    <PageContainer>
+      <Typography
+        component={Link}
         href="/workflows"
-        className="text-sm text-indigo-600 hover:underline"
+        variant="body2"
+        className={styles.backLink}
+        data-testid="back-to-workflows"
       >
-        &larr; Back to workflows
-      </Link>
+        &larr; {t("backToWorkflows")}
+      </Typography>
 
       <WorkflowEditorHeader
         name={editor.name}
@@ -61,6 +72,6 @@ export default function WorkflowEditor() {
         onSave={editor.handleSave}
         onDone={() => router.push("/workflows")}
       />
-    </div>
+    </PageContainer>
   );
 }
