@@ -36,7 +36,7 @@ export default function RunHistory() {
 
   return (
     <PageContainer>
-      <RunHistoryHeader project={project} />
+      <RunHistoryHeader project={project} projectId={projectId} />
 
       {loading && (
         <Typography

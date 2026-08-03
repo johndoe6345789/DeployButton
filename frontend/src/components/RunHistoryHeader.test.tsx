@@ -2,15 +2,21 @@ import { screen } from "@testing-library/react";
 import { renderWithProviders } from "@/test-utils/renderWithProviders";
 import RunHistoryHeader from "./RunHistoryHeader";
 
+jest.mock("next/navigation", () => ({
+  useRouter: () => ({ push: jest.fn() }),
+}));
+jest.mock("@/api/client", () => ({ api: { deploy: jest.fn() } }));
+
 describe("RunHistoryHeader", () => {
   it("shows a generic title when no project is loaded yet", () => {
-    renderWithProviders(<RunHistoryHeader project={null} />);
+    renderWithProviders(<RunHistoryHeader project={null} projectId={1} />);
     expect(screen.getByText("Run History")).toBeInTheDocument();
   });
 
   it("shows the project name once loaded", () => {
     renderWithProviders(
       <RunHistoryHeader
+        projectId={1}
         project={{
           id: 1,
           name: "My App",
@@ -28,10 +34,15 @@ describe("RunHistoryHeader", () => {
   });
 
   it("links back to the dashboard", () => {
-    renderWithProviders(<RunHistoryHeader project={null} />);
+    renderWithProviders(<RunHistoryHeader project={null} projectId={1} />);
     expect(screen.getByTestId("back-to-dashboard")).toHaveAttribute(
       "href",
       "/",
     );
+  });
+
+  it("renders a deploy button for the project", () => {
+    renderWithProviders(<RunHistoryHeader project={null} projectId={1} />);
+    expect(screen.getByTestId("deploy-button")).toBeInTheDocument();
   });
 });

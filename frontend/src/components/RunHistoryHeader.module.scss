@@ -1,8 +1,14 @@
+@use "../styles/mixins" as *;
+
 .backLink {
   color: var(--mui-palette-primary-main);
 }
 
+.titleRow {
+  @include flex-responsive(16px, space-between);
+  margin-top: 8px;
+}
+
 .title {
   font-weight: 700;
-  margin-top: 8px;
 }

@@ -4,10 +4,11 @@ import RunHistory from "./page";
 import { api } from "@/api/client";
 
 jest.mock("@/api/client", () => ({
-  api: { getProject: jest.fn(), listRuns: jest.fn() },
+  api: { getProject: jest.fn(), listRuns: jest.fn(), deploy: jest.fn() },
 }));
 jest.mock("next/navigation", () => ({
   useParams: () => ({ id: "1" }),
+  useRouter: () => ({ push: jest.fn() }),
 }));
 
 const project = {
