@@ -2,6 +2,13 @@ services:
   backend:
     build:
       context: ./backend
+    environment:
+      # The mounted /srv/repos trees are owned by the host user, not root
+      # (who this container runs as) — tell git to trust them regardless of
+      # owner instead of refusing every git_pull step with "dubious ownership".
+      - GIT_CONFIG_COUNT=1
+      - GIT_CONFIG_KEY_0=safe.directory
+      - GIT_CONFIG_VALUE_0=*
     volumes:
       - backend-data:/app/data
       # The workflow engine's steps (git_pull, npm_install/build, docker_build)
