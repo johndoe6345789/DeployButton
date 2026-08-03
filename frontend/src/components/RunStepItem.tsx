@@ -3,6 +3,7 @@
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import StatusBadge from "./StatusBadge";
+import AnsiOutput from "./AnsiOutput";
 import type { StepRun } from "@/types";
 import styles from "./RunStepItem.module.scss";
 
@@ -15,9 +16,7 @@ export default function RunStepItem({ step }: { step: StepRun }) {
         </Typography>
         <StatusBadge status={step.status} />
       </div>
-      {step.output && (
-        <pre className={styles.output}>{step.output}</pre>
-      )}
+      {step.output && <AnsiOutput text={step.output} />}
     </Paper>
   );
 }
