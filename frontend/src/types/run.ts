@@ -18,7 +18,7 @@ export interface StepRun {
   name: string;
   type: StepType;
   status: RunStatus | "skipped";
-  output: string;
+  output_length: number;
   exit_code: number | null;
   started_at: string;
   finished_at: string | null;
@@ -26,4 +26,13 @@ export interface StepRun {
 
 export interface RunDetail extends WorkflowRun {
   step_runs: StepRun[];
+}
+
+// A slice of a step's output spanning characters [start_offset, end_offset)
+// of the full stored text. See GET /api/step-runs/{id}/output.
+export interface StepOutputChunk {
+  text: string;
+  start_offset: number;
+  end_offset: number;
+  total_length: number;
 }

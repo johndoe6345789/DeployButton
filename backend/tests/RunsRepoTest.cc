@@ -32,6 +32,13 @@ TEST(RunsRepo, GetMissingReturnsNull) {
     EXPECT_TRUE(getRunDetail(f.db, 999).isNull());
 }
 
+TEST(RunsRepo, GetStepOutputChunkMissingStepRunReturnsNull) {
+    Fixture f;
+    EXPECT_TRUE(
+        getStepOutputChunk(f.db, 999, std::nullopt, std::nullopt, 65536)
+            .isNull());
+}
+
 TEST(RunsRepo, FinishRunSetsStatusAndFinishedAt) {
     Fixture f;
     auto runId = createRun(f.db, f.projectId, f.workflowId, "manual");
@@ -67,5 +74,5 @@ TEST(RunsRepo, StepRunLifecycle) {
     auto step = detail["step_runs"][0];
     EXPECT_EQ(step["status"].asString(), "success");
     EXPECT_EQ(step["exit_code"].asInt(), 0);
-    EXPECT_EQ(step["output"].asString(), "hello\nworld\n");
+    EXPECT_EQ(step["output_length"].asInt64(), 12);
 }

@@ -4,8 +4,8 @@ using namespace drogon::orm;
 
 namespace deploybutton {
 long long createStepRun(const DbClientPtr &db, long long runId,
-                        long long stepId, int position, const std::string &name,
-                        const std::string &type) {
+                        long long stepId, int position,
+                        const std::string &name, const std::string &type) {
     auto result = db->execSqlSync(
         "INSERT INTO step_runs (run_id, step_id, position, name, type, status) "
         "VALUES (?, ?, ?, ?, ?, 'running')",

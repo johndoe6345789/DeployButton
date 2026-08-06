@@ -21,4 +21,5 @@ export const api = {
 
   listRuns: runsApi.listForProject,
   getRun: runsApi.get,
+  getStepOutput: runsApi.getStepOutput,
 };

@@ -1,5 +1,6 @@
 #include "../engine/WorkflowExecutor.h"
 #include "../repositories/ProjectsRepo.h"
+#include "../repositories/RunsRepo.h"
 #include "../repositories/WorkflowsRepo.h"
 #include "support/ExecutorTestSupport.h"
 #include <drogon/drogon.h>
@@ -23,7 +24,11 @@ TEST(WorkflowExecutor, SuccessfulRunMarksSuccessAndCapturesOutput) {
     auto detail = waitForTerminal(runId);
     EXPECT_EQ(detail["status"].asString(), "success");
     ASSERT_EQ(detail["step_runs"].size(), 1u);
-    EXPECT_EQ(detail["step_runs"][0]["output"].asString(), "executor-ok\n");
+    auto stepRunId = detail["step_runs"][0]["id"].asInt64();
+    EXPECT_EQ(detail["step_runs"][0]["output_length"].asInt64(), 12);
+    auto output = getStepOutputChunk(db, stepRunId, std::nullopt,
+                                     std::nullopt, 65536);
+    EXPECT_EQ(output["text"].asString(), "executor-ok\n");
 }
 
 TEST(WorkflowExecutor, FailingStepStopsSubsequentSteps) {

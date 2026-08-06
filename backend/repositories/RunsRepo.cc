@@ -25,7 +25,8 @@ Json::Value stepRunRowToJson(const Row &row) {
     obj["name"] = row["name"].as<std::string>();
     obj["type"] = row["type"].as<std::string>();
     obj["status"] = row["status"].as<std::string>();
-    obj["output"] = row["output"].as<std::string>();
+    obj["output_length"] =
+        deploybutton::toJsonInt64(row["output_length"].as<long long>());
     obj["exit_code"] = deploybutton::nullableInt(row["exit_code"]);
     obj["started_at"] = row["started_at"].as<std::string>();
     obj["finished_at"] = deploybutton::nullableString(row["finished_at"]);
@@ -61,8 +62,8 @@ Json::Value getRunDetail(const DbClientPtr &db, long long runId) {
 
     Json::Value stepRuns(Json::arrayValue);
     auto stepResult = db->execSqlSync(
-        "SELECT id, position, name, type, status, output, exit_code, "
-        "started_at, finished_at "
+        "SELECT id, position, name, type, status, length(output) AS "
+        "output_length, exit_code, started_at, finished_at "
         "FROM step_runs WHERE run_id = ? ORDER BY position ASC",
         runId);
     for (const auto &row : stepResult) {

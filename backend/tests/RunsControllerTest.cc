@@ -8,6 +8,10 @@ TEST(RunsController, GetMissingRunReturns404) {
     EXPECT_EQ(apiGet("/api/runs/999999").httpCode, 404);
 }
 
+TEST(RunsController, GetStepOutputMissingStepRunReturns404) {
+    EXPECT_EQ(apiGet("/api/step-runs/999999/output").httpCode, 404);
+}
+
 TEST(RunsController, ListForProjectReturnsArray) {
     auto workflowId = makeWorkflowViaApi("Runs list workflow");
     auto projectId =

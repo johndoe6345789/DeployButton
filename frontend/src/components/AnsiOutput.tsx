@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { memo } from "react";
 import type { CSSProperties } from "react";
 import Anser from "anser";
-import styles from "./AnsiOutput.module.scss";
 
 const DECORATION_STYLE: Record<string, CSSProperties> = {
   bold: { fontWeight: 700 },
@@ -13,22 +12,19 @@ const DECORATION_STYLE: Record<string, CSSProperties> = {
   strikethrough: { textDecoration: "line-through" },
 };
 
-export default function AnsiOutput({ text }: { text: string }) {
-  const ref = useRef<HTMLPreElement>(null);
-
-  // Keep pinned to the latest line as new output streams in from polling.
-  useEffect(() => {
-    const el = ref.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [text]);
-
+// Renders one immutable fragment of ANSI-coded output as a run of styled
+// spans. Deliberately has no wrapping element or scroll behavior of its own
+// -- StepOutputViewer owns the single scrollable container and stacks
+// fragments inside it, so each fragment here only ever gets ANSI-parsed
+// once (memoized), never re-parsed as sibling fragments come and go.
+function AnsiOutput({ text }: { text: string }) {
   const chunks = Anser.ansiToJson(text, {
     use_classes: false,
     remove_empty: true,
   });
 
   return (
-    <pre ref={ref} className={styles.output} data-testid="ansi-output">
+    <>
       {chunks.map((chunk, i) => (
         <span
           key={i}
@@ -47,6 +43,8 @@ export default function AnsiOutput({ text }: { text: string }) {
           {chunk.content}
         </span>
       ))}
-    </pre>
+    </>
   );
 }
+
+export default memo(AnsiOutput);

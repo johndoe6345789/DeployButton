@@ -3,7 +3,9 @@ import { renderWithProviders } from "@/test-utils/renderWithProviders";
 import RunDetailPage from "./page";
 import { api } from "@/api/client";
 
-jest.mock("@/api/client", () => ({ api: { getRun: jest.fn() } }));
+jest.mock("@/api/client", () => ({
+  api: { getRun: jest.fn(), getStepOutput: jest.fn() },
+}));
 jest.mock("next/navigation", () => ({
   useParams: () => ({ id: "7" }),
 }));
@@ -23,7 +25,7 @@ const runDetail = {
       name: "Pull",
       type: "git_pull" as const,
       status: "success" as const,
-      output: "done\n",
+      output_length: 5,
       exit_code: 0,
       started_at: "2026-01-01 00:00:00",
       finished_at: "2026-01-01 00:00:01",
@@ -32,7 +34,15 @@ const runDetail = {
 };
 
 describe("RunDetailPage", () => {
-  beforeEach(() => (api.getRun as jest.Mock).mockReset());
+  beforeEach(() => {
+    (api.getRun as jest.Mock).mockReset();
+    (api.getStepOutput as jest.Mock).mockReset().mockResolvedValue({
+      text: "done\n",
+      start_offset: 0,
+      end_offset: 5,
+      total_length: 5,
+    });
+  });
 
   it("shows Loading before the run has resolved", () => {
     (api.getRun as jest.Mock).mockReturnValue(new Promise(() => {}));
@@ -46,7 +56,7 @@ describe("RunDetailPage", () => {
 
     expect(screen.getByText("Run #7")).toBeInTheDocument();
     expect(await screen.findByText("Pull")).toBeInTheDocument();
-    expect(screen.getByText(/done/)).toBeInTheDocument();
+    expect(await screen.findByText(/done/)).toBeInTheDocument();
   });
 
   it("links back to the project's run history once loaded", async () => {
