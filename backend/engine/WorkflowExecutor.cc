@@ -2,7 +2,6 @@
 #include "../repositories/JsonUtil.h"
 #include "../repositories/RunsRepo.h"
 #include "../repositories/WorkflowsRepo.h"
-#include "RunGuard.h"
 #include "Steps.h"
 #include <drogon/drogon.h>
 #include <thread>
@@ -10,8 +9,7 @@
 using namespace drogon;
 
 namespace {
-void runWorkflowThread(long long projectId, long long workflowId,
-                       long long runId) {
+void runWorkflowThread(long long workflowId, long long runId) {
     auto db = app().getDbClient();
     auto steps = deploybutton::getStepsForWorkflow(db, workflowId);
 
@@ -38,20 +36,18 @@ void runWorkflowThread(long long projectId, long long workflowId,
     }
 
     deploybutton::finishRun(db, runId, failed ? "failed" : "success");
-    deploybutton::releaseRunGuard(projectId);
 }
 }  // namespace
 
 namespace deploybutton {
 long long startWorkflowRun(long long projectId, long long workflowId,
                            const std::string &triggerType) {
-    if (!tryAcquireRunGuard(projectId)) {
+    auto db = app().getDbClient();
+    auto runId = createRunIfNotRunning(db, projectId, workflowId, triggerType);
+    if (runId < 0) {
         return -1;
     }
-
-    auto db = app().getDbClient();
-    auto runId = createRun(db, projectId, workflowId, triggerType);
-    std::thread(runWorkflowThread, projectId, workflowId, runId).detach();
+    std::thread(runWorkflowThread, workflowId, runId).detach();
     return runId;
 }
 }  // namespace deploybutton

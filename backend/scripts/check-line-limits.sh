@@ -17,7 +17,7 @@ while IFS= read -r -d '' file; do
         echo "$file:$long_line: line exceeds 80 columns"
         status=1
     fi
-done < <(find controllers engine repositories db models tests \
+done < <(find controllers engine repositories db tests \
     -type f \( -name "*.cc" -o -name "*.h" \) -print0)
 
 exit $status

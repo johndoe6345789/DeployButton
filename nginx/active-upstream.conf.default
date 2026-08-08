@@ -1,0 +1,7 @@
+# Seeded into the image so a fresh nginx container starts pointed at the
+# "blue" slot docker-compose.yml brings up. The blue_green_deploy step
+# overwrites the running container's copy of this file at
+# /etc/nginx/active/active-upstream.conf on every cutover; this baked-in
+# default is only ever read on a brand new nginx container.
+set $active_backend backend-blue:8080;
+set $active_frontend frontend-blue:3000;

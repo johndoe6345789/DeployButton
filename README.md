@@ -18,19 +18,35 @@ the access boundary.
 ## Running it
 
 ```sh
-docker compose up --build
+docker compose up --build -d
 ```
 
-This starts three containers (`backend`, `frontend`, `nginx`) and exposes the app on
-`http://localhost:8080`. SQLite data persists in the `backend-data` volume.
+This starts nginx plus the initial `backend-blue`/`frontend-blue` pair and exposes the app on
+`http://localhost:8080`. SQLite data persists in the `deploybutton-backend-data` volume.
 
 Two default workflow templates are seeded on first boot ("React App via CapRover" and
 "Node/Docker Backend via CapRover") — open a project's assigned workflow in the **Workflows**
 tab and fill in your real repo path and CapRover trigger-build webhook URL/token before using them.
 
 The backend container mounts `/srv/repos` (where workflow steps `cd` into per-project repos) and
-`/var/run/docker.sock` (for `docker_build` steps) from the host — adjust the `/srv/repos` bind
-mount in `docker-compose.yml` if your repos live elsewhere.
+`/var/run/docker.sock` (for `docker_build` steps, and for the `blue_green_deploy` step below) from
+the host — adjust the `/srv/repos` bind mount in `docker-compose.yml` and `docker-compose.app.yml`
+if your repos live elsewhere.
+
+## Self-deploying DeployButton
+
+DeployButton can deploy itself: check this repo out to `/srv/repos/deploybutton` (or wherever you
+pointed the `/srv/repos` mount) and give its project a workflow with a `git_pull` step followed by
+a `blue_green_deploy` step (`cwd` set to that same path).
+
+Running that workflow builds and starts whichever slot isn't currently live (`blue`/`green`)
+*alongside* the one currently serving traffic, waits for its `/api/health` endpoint to respond,
+then flips nginx over to it and tears down the old slot — all without nginx (or nginx's
+connections) ever going down. If the new build fails, or never becomes healthy, the currently
+running slot is left untouched and the deploy just fails. See
+[docker-compose.app.yml](docker-compose.app.yml) and
+[backend/engine/SelfDeployStep.cc](backend/engine/SelfDeployStep.cc) for how the two slots
+coexist and hand off.
 
 ## CI / images
 

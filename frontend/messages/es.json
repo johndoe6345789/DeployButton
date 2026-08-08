@@ -73,6 +73,7 @@
     "npm_build": "Compilar (npm/yarn/pnpm)",
     "docker_build": "Compilar Docker",
     "http_webhook": "Llamada webhook HTTP",
+    "blue_green_deploy": "Auto-despliegue azul/verde",
     "delay": "Retraso",
     "notify": "Notificar"
   },
@@ -116,6 +117,7 @@
     "body": "Cuerpo (opcional)",
     "seconds": "Segundos",
     "message": "Mensaje",
-    "webhookUrl": "URL del webhook (opcional)"
+    "webhookUrl": "URL del webhook (opcional)",
+    "healthTimeoutSeconds": "Tiempo de espera del chequeo de salud (segundos)"
   }
 }

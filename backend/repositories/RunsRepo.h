@@ -16,6 +16,15 @@ Json::Value getRunDetail(const drogon::orm::DbClientPtr &db, long long runId);
 long long createRun(const drogon::orm::DbClientPtr &db, long long projectId,
                     long long workflowId, const std::string &triggerType);
 
+// Atomically creates a run iff no other run for this project is already
+// 'running', in one SQL statement (INSERT ... WHERE NOT EXISTS). This is the
+// run-concurrency guard: unlike an in-process lock, it's correct even when
+// two backend processes share this same database file, e.g. the old and new
+// slot during a blue/green self-deploy. Returns -1 if a run is in progress.
+long long createRunIfNotRunning(const drogon::orm::DbClientPtr &db,
+                                long long projectId, long long workflowId,
+                                const std::string &triggerType);
+
 void finishRun(const drogon::orm::DbClientPtr &db, long long runId,
                const std::string &status);
 

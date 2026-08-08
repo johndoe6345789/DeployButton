@@ -37,6 +37,15 @@ void applySchema(const std::string &schemaPath) {
     buffer << file.rdbuf();
 
     auto db = app().getDbClient();
+
+    // WAL lets one writer and many readers proceed concurrently instead of
+    // locking the whole file, and busy_timeout makes a writer retry for 5s
+    // instead of failing immediately -- both matter once two backend
+    // processes (the old and new slot during a blue/green self-deploy)
+    // share this same database file for the brief cutover window.
+    db->execSqlSync("PRAGMA journal_mode=WAL;");
+    db->execSqlSync("PRAGMA busy_timeout=5000;");
+
     for (auto &stmt : splitStatements(buffer.str())) {
         try {
             db->execSqlSync(stmt);
