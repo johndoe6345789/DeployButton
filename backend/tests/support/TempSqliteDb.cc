@@ -13,7 +13,7 @@ DbClientPtr freshTestDb() {
     std::stringstream buffer;
     buffer << file.rdbuf();
 
-    for (auto &stmt : deploybutton::splitStatements(buffer.str())) {
+    for (auto& stmt : deploybutton::splitStatements(buffer.str())) {
         db->execSqlSync(stmt);
     }
     return db;

@@ -7,8 +7,8 @@ using namespace drogon;
 
 namespace deploybutton {
 void DeployController::deploy(
-    const HttpRequestPtr &req,
-    std::function<void(const HttpResponsePtr &)> &&callback, long long id) {
+    const HttpRequestPtr& req,
+    std::function<void(const HttpResponsePtr&)>&& callback, long long id) {
     auto db = app().getDbClient();
     auto project = getProject(db, id);
     if (project.isNull()) {

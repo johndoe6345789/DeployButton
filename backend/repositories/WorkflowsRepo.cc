@@ -4,7 +4,7 @@
 using namespace drogon::orm;
 
 namespace {
-Json::Value workflowRowToJson(const Row &row) {
+Json::Value workflowRowToJson(const Row& row) {
     Json::Value obj;
     obj["id"] = deploybutton::toJsonInt64(row["id"].as<long long>());
     obj["name"] = row["name"].as<std::string>();
@@ -13,7 +13,7 @@ Json::Value workflowRowToJson(const Row &row) {
     return obj;
 }
 
-Json::Value stepRowToJson(const Row &row) {
+Json::Value stepRowToJson(const Row& row) {
     Json::Value obj;
     obj["id"] = deploybutton::toJsonInt64(row["id"].as<long long>());
     obj["position"] = row["position"].as<int>();
@@ -26,18 +26,18 @@ Json::Value stepRowToJson(const Row &row) {
 }  // namespace
 
 namespace deploybutton {
-Json::Value listWorkflows(const DbClientPtr &db) {
+Json::Value listWorkflows(const DbClientPtr& db) {
     Json::Value arr(Json::arrayValue);
     auto result = db->execSqlSync(
         "SELECT id, name, description, is_template FROM workflows ORDER BY id "
         "DESC");
-    for (const auto &row : result) {
+    for (const auto& row : result) {
         arr.append(workflowRowToJson(row));
     }
     return arr;
 }
 
-Json::Value getWorkflowWithSteps(const DbClientPtr &db, long long id) {
+Json::Value getWorkflowWithSteps(const DbClientPtr& db, long long id) {
     auto result = db->execSqlSync(
         "SELECT id, name, description, is_template FROM workflows WHERE id = ?",
         id);
@@ -51,7 +51,7 @@ Json::Value getWorkflowWithSteps(const DbClientPtr &db, long long id) {
         "SELECT id, position, name, type, config FROM workflow_steps "
         "WHERE workflow_id = ? ORDER BY position ASC",
         id);
-    for (const auto &row : stepsResult) {
+    for (const auto& row : stepsResult) {
         steps.append(stepRowToJson(row));
     }
     workflow["steps"] = steps;

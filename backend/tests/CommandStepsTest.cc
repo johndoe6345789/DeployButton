@@ -11,7 +11,7 @@ TEST_F(StubPath, NpmInstallRunsNpmInstall) {
     config["manager"] = "npm";
     std::string output;
     auto result =
-        npmInstallStep(config, [&](const std::string &c) { output += c; });
+        npmInstallStep(config, [&](const std::string& c) { output += c; });
     EXPECT_EQ(result.exitCode, 0);
     EXPECT_NE(output.find("STUB:npm install"), std::string::npos);
 }
@@ -20,7 +20,7 @@ TEST_F(StubPath, NpmInstallDefaultsToNpm) {
     addStub("npm");
     std::string output;
     auto result = npmInstallStep(Json::Value(),
-                                 [&](const std::string &c) { output += c; });
+                                 [&](const std::string& c) { output += c; });
     EXPECT_EQ(result.exitCode, 0);
     EXPECT_NE(output.find("STUB:npm install"), std::string::npos);
 }
@@ -32,7 +32,7 @@ TEST_F(StubPath, NpmBuildUsesNpmRunScript) {
     config["script"] = "build";
     std::string output;
     auto result =
-        npmBuildStep(config, [&](const std::string &c) { output += c; });
+        npmBuildStep(config, [&](const std::string& c) { output += c; });
     EXPECT_EQ(result.exitCode, 0);
     EXPECT_NE(output.find("STUB:npm run build"), std::string::npos);
 }
@@ -44,7 +44,7 @@ TEST_F(StubPath, NpmBuildUsesYarnDirectScript) {
     config["script"] = "build";
     std::string output;
     auto result =
-        npmBuildStep(config, [&](const std::string &c) { output += c; });
+        npmBuildStep(config, [&](const std::string& c) { output += c; });
     EXPECT_EQ(result.exitCode, 0);
     EXPECT_NE(output.find("STUB:yarn build"), std::string::npos);
 }
@@ -53,7 +53,7 @@ TEST_F(StubPath, ShellCommandDelegatesToRunCommand) {
     Json::Value config;
     config["command"] = "echo shell-step-ran";
     std::string output;
-    auto result = shellStep(config, [&](const std::string &c) { output += c; });
+    auto result = shellStep(config, [&](const std::string& c) { output += c; });
     EXPECT_EQ(result.exitCode, 0);
     EXPECT_EQ(output, "shell-step-ran\n");
 }

@@ -4,7 +4,7 @@
 using namespace drogon::orm;
 
 namespace {
-Json::Value runRowToJson(const Row &row) {
+Json::Value runRowToJson(const Row& row) {
     Json::Value obj;
     obj["id"] = deploybutton::toJsonInt64(row["id"].as<long long>());
     obj["project_id"] =
@@ -18,7 +18,7 @@ Json::Value runRowToJson(const Row &row) {
     return obj;
 }
 
-Json::Value stepRunRowToJson(const Row &row) {
+Json::Value stepRunRowToJson(const Row& row) {
     Json::Value obj;
     obj["id"] = deploybutton::toJsonInt64(row["id"].as<long long>());
     obj["position"] = row["position"].as<int>();
@@ -35,7 +35,7 @@ Json::Value stepRunRowToJson(const Row &row) {
 }  // namespace
 
 namespace deploybutton {
-Json::Value listRunsForProject(const DbClientPtr &db, long long projectId) {
+Json::Value listRunsForProject(const DbClientPtr& db, long long projectId) {
     Json::Value arr(Json::arrayValue);
     auto result = db->execSqlSync(
         "SELECT id, project_id, workflow_id, trigger_type, status, started_at, "
@@ -43,13 +43,13 @@ Json::Value listRunsForProject(const DbClientPtr &db, long long projectId) {
         "FROM workflow_runs WHERE project_id = ? ORDER BY started_at DESC, id "
         "DESC",
         projectId);
-    for (const auto &row : result) {
+    for (const auto& row : result) {
         arr.append(runRowToJson(row));
     }
     return arr;
 }
 
-Json::Value getRunDetail(const DbClientPtr &db, long long runId) {
+Json::Value getRunDetail(const DbClientPtr& db, long long runId) {
     auto result = db->execSqlSync(
         "SELECT id, project_id, workflow_id, trigger_type, status, started_at, "
         "finished_at "
@@ -66,7 +66,7 @@ Json::Value getRunDetail(const DbClientPtr &db, long long runId) {
         "output_length, exit_code, started_at, finished_at "
         "FROM step_runs WHERE run_id = ? ORDER BY position ASC",
         runId);
-    for (const auto &row : stepResult) {
+    for (const auto& row : stepResult) {
         stepRuns.append(stepRunRowToJson(row));
     }
     run["step_runs"] = stepRuns;

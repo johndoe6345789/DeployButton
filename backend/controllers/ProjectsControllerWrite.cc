@@ -6,8 +6,8 @@ using namespace drogon;
 
 namespace deploybutton {
 void ProjectsController::update(
-    const HttpRequestPtr &req,
-    std::function<void(const HttpResponsePtr &)> &&callback, long long id) {
+    const HttpRequestPtr& req,
+    std::function<void(const HttpResponsePtr&)>&& callback, long long id) {
     auto db = app().getDbClient();
     auto existing = getProject(db, id);
     if (existing.isNull()) {
@@ -32,14 +32,14 @@ void ProjectsController::update(
     try {
         updateProject(db, id, name, slug, repoUrl, workflowId);
         callback(jsonResponse(getProject(db, id)));
-    } catch (const drogon::orm::DrogonDbException &e) {
+    } catch (const drogon::orm::DrogonDbException& e) {
         callback(errorResponse(k400BadRequest, e.base().what()));
     }
 }
 
 void ProjectsController::remove(
-    const HttpRequestPtr &req,
-    std::function<void(const HttpResponsePtr &)> &&callback, long long id) {
+    const HttpRequestPtr& req,
+    std::function<void(const HttpResponsePtr&)>&& callback, long long id) {
     auto db = app().getDbClient();
     deleteProject(db, id);
     callback(jsonResponse(Json::Value(Json::objectValue)));

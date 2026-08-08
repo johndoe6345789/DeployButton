@@ -8,5 +8,5 @@ namespace deploybutton::test {
 Json::Value waitForTerminal(long long runId, int timeoutMs = 5000);
 
 // A single-step shell workflow step definition.
-Json::Value shellStepConfig(const std::string &command);
+Json::Value shellStepConfig(const std::string& command);
 }  // namespace deploybutton::test

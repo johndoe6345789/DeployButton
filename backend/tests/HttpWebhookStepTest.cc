@@ -16,7 +16,7 @@ TEST(HttpWebhookStep, SuccessfulPostReturnsExitZero) {
 
     std::string output;
     auto result =
-        httpWebhookStep(config, [&](const std::string &c) { output += c; });
+        httpWebhookStep(config, [&](const std::string& c) { output += c; });
 
     EXPECT_EQ(result.exitCode, 0);
     EXPECT_NE(output.find("HTTP 200"), std::string::npos);
@@ -31,7 +31,7 @@ TEST(HttpWebhookStep, NonSuccessStatusReturnsExitOne) {
     Json::Value config;
     config["url"] = "http://127.0.0.1:" + std::to_string(port) + "/hook";
 
-    auto result = httpWebhookStep(config, [](const std::string &) {});
+    auto result = httpWebhookStep(config, [](const std::string&) {});
     EXPECT_EQ(result.exitCode, 1);
 }
 
@@ -39,7 +39,7 @@ TEST(HttpWebhookStep, MissingUrlFailsWithoutNetworkCall) {
     Json::Value config;
     std::string output;
     auto result =
-        httpWebhookStep(config, [&](const std::string &c) { output += c; });
+        httpWebhookStep(config, [&](const std::string& c) { output += c; });
     EXPECT_EQ(result.exitCode, 1);
     EXPECT_NE(output.find("missing 'url'"), std::string::npos);
 }
@@ -47,7 +47,7 @@ TEST(HttpWebhookStep, MissingUrlFailsWithoutNetworkCall) {
 TEST(HttpWebhookStep, UnreachableHostFailsGracefully) {
     Json::Value config;
     config["url"] = "http://127.0.0.1:1/unreachable";
-    auto result = httpWebhookStep(config, [](const std::string &) {});
+    auto result = httpWebhookStep(config, [](const std::string&) {});
     EXPECT_EQ(result.exitCode, 1);
 }
 
@@ -59,7 +59,7 @@ TEST(HttpWebhookStep, GetMethodSendsNoBody) {
     config["url"] = "http://127.0.0.1:" + std::to_string(port) + "/hook";
     config["method"] = "GET";
 
-    auto result = httpWebhookStep(config, [](const std::string &) {});
+    auto result = httpWebhookStep(config, [](const std::string&) {});
     EXPECT_EQ(result.exitCode, 0);
     EXPECT_NE(server.lastRequest().find("GET /hook"), std::string::npos);
 }

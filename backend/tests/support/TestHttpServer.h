@@ -15,10 +15,10 @@ public:
     // Starts listening on 127.0.0.1 and returns the bound port. Each
     // accepted connection replies with `responseStatusLine` and captures
     // the request into lastRequest().
-    int start(const std::string &responseStatusLine = "200 OK");
+    int start(const std::string& responseStatusLine = "200 OK");
     void stop();
 
-    const std::string &lastRequest() const { return lastRequest_; }
+    const std::string& lastRequest() const { return lastRequest_; }
 
 private:
     void acceptLoop();

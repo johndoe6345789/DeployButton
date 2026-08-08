@@ -4,15 +4,15 @@
 #include <thread>
 
 namespace deploybutton::test {
-long long makeWorkflowViaApi(const std::string &name) {
+long long makeWorkflowViaApi(const std::string& name) {
     Json::Value body;
     body["name"] = name;
     body["description"] = "";
     return apiPost("/api/workflows", body).body["id"].asInt64();
 }
 
-long long makeWorkflowWithShellStep(const std::string &name,
-                                    const std::string &command) {
+long long makeWorkflowWithShellStep(const std::string& name,
+                                    const std::string& command) {
     auto id = makeWorkflowViaApi(name);
 
     Json::Value steps(Json::arrayValue);
@@ -25,7 +25,7 @@ long long makeWorkflowWithShellStep(const std::string &name,
     return id;
 }
 
-long long makeProjectViaApi(const std::string &name, const std::string &slug,
+long long makeProjectViaApi(const std::string& name, const std::string& slug,
                             long long workflowId) {
     Json::Value create;
     create["name"] = name;
@@ -48,13 +48,13 @@ Json::Value waitForRun(long long runId, int timeoutMs) {
     }
 }
 
-long long runShellStepAndGetId(const std::string &slug,
-                               const std::string &command) {
+long long runShellStepAndGetId(const std::string& slug,
+                               const std::string& command) {
     auto workflowId = makeWorkflowWithShellStep(slug, command);
     auto projectId = makeProjectViaApi(slug, slug, workflowId);
-    auto deploy = apiPost(
-        "/api/projects/" + std::to_string(projectId) + "/deploy",
-        Json::Value());
+    auto deploy =
+        apiPost("/api/projects/" + std::to_string(projectId) + "/deploy",
+                Json::Value());
     auto run = waitForRun(deploy.body["runId"].asInt64());
     return run["step_runs"][0]["id"].asInt64();
 }

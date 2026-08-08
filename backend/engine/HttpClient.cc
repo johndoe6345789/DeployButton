@@ -2,13 +2,13 @@
 #include <curl/curl.h>
 
 namespace {
-size_t curlWriteCallback(char *ptr, size_t size, size_t nmemb, void *userdata) {
-    auto *out = static_cast<std::string *>(userdata);
+size_t curlWriteCallback(char* ptr, size_t size, size_t nmemb, void* userdata) {
+    auto* out = static_cast<std::string*>(userdata);
     out->append(ptr, size * nmemb);
     return size * nmemb;
 }
 
-void setMethod(CURL *curl, const std::string &method, const std::string &body) {
+void setMethod(CURL* curl, const std::string& method, const std::string& body) {
     if (method == "GET") {
         curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
         return;
@@ -27,9 +27,9 @@ void setMethod(CURL *curl, const std::string &method, const std::string &body) {
 }  // namespace
 
 namespace deploybutton {
-HttpResult performHttpRequest(const std::string &url, const std::string &method,
-                              const std::string &body) {
-    CURL *curl = curl_easy_init();
+HttpResult performHttpRequest(const std::string& url, const std::string& method,
+                              const std::string& body) {
+    CURL* curl = curl_easy_init();
     if (!curl) {
         return {false, 0, "", "Failed to initialize CURL"};
     }

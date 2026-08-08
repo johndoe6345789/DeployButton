@@ -5,8 +5,8 @@ using namespace drogon;
 
 namespace deploybutton {
 void HealthController::get(
-    const HttpRequestPtr &req,
-    std::function<void(const HttpResponsePtr &)> &&callback) {
+    const HttpRequestPtr& req,
+    std::function<void(const HttpResponsePtr&)>&& callback) {
     Json::Value body;
     body["status"] = "ok";
     callback(jsonResponse(body));

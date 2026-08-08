@@ -17,7 +17,7 @@ Json::Value waitForTerminal(long long runId, int timeoutMs) {
     }
 }
 
-Json::Value shellStepConfig(const std::string &command) {
+Json::Value shellStepConfig(const std::string& command) {
     Json::Value step;
     step["name"] = "step";
     step["type"] = "shell";

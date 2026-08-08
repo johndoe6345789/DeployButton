@@ -5,20 +5,20 @@
 
 namespace deploybutton::test {
 namespace {
-size_t writeCallback(char *ptr, size_t size, size_t nmemb, void *userdata) {
-    auto *out = static_cast<std::string *>(userdata);
+size_t writeCallback(char* ptr, size_t size, size_t nmemb, void* userdata) {
+    auto* out = static_cast<std::string*>(userdata);
     out->append(ptr, size * nmemb);
     return size * nmemb;
 }
 
-ApiResponse call(const std::string &method, const std::string &path,
-                 const Json::Value *jsonBody) {
+ApiResponse call(const std::string& method, const std::string& path,
+                 const Json::Value* jsonBody) {
     std::string url = AppTestEnvironment::baseUrl() + path;
     std::string requestBody =
         jsonBody ? deploybutton::jsonToCompactString(*jsonBody) : "";
 
-    CURL *curl = curl_easy_init();
-    curl_slist *headers =
+    CURL* curl = curl_easy_init();
+    curl_slist* headers =
         curl_slist_append(nullptr, "Content-Type: application/json");
 
     std::string responseBody;
@@ -54,19 +54,19 @@ ApiResponse call(const std::string &method, const std::string &path,
 }
 }  // namespace
 
-ApiResponse apiGet(const std::string &path) {
+ApiResponse apiGet(const std::string& path) {
     return call("GET", path, nullptr);
 }
 
-ApiResponse apiPost(const std::string &path, const Json::Value &body) {
+ApiResponse apiPost(const std::string& path, const Json::Value& body) {
     return call("POST", path, &body);
 }
 
-ApiResponse apiPut(const std::string &path, const Json::Value &body) {
+ApiResponse apiPut(const std::string& path, const Json::Value& body) {
     return call("PUT", path, &body);
 }
 
-ApiResponse apiDelete(const std::string &path) {
+ApiResponse apiDelete(const std::string& path) {
     return call("DELETE", path, nullptr);
 }
 }  // namespace deploybutton::test

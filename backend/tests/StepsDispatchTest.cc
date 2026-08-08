@@ -4,11 +4,11 @@
 using namespace deploybutton;
 
 namespace {
-std::string run(const std::string &type, const Json::Value &config,
-                int *exit = nullptr) {
+std::string run(const std::string& type, const Json::Value& config,
+                int* exit = nullptr) {
     std::string output;
     auto result = executeStep(
-        type, config, [&](const std::string &chunk) { output += chunk; });
+        type, config, [&](const std::string& chunk) { output += chunk; });
     if (exit) *exit = result.exitCode;
     return output;
 }

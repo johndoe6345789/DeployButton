@@ -7,7 +7,7 @@
 
 namespace deploybutton::test {
 namespace {
-const char *kConfigPath = "./test_app_config.json";
+const char* kConfigPath = "./test_app_config.json";
 const int kTestPort = 18080;
 
 void writeConfig() {
@@ -26,7 +26,7 @@ void writeConfig() {
 }
 }  // namespace
 
-const std::string &AppTestEnvironment::baseUrl() {
+const std::string& AppTestEnvironment::baseUrl() {
     static const std::string url =
         "http://127.0.0.1:" + std::to_string(kTestPort);
     return url;

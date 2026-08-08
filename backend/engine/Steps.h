@@ -13,6 +13,6 @@ struct StepResult {
 // docker_build | http_webhook | blue_green_deploy | delay | notify) and
 // executes it, streaming output via onOutput.
 StepResult executeStep(
-    const std::string &type, const Json::Value &config,
-    const std::function<void(const std::string &chunk)> &onOutput);
+    const std::string& type, const Json::Value& config,
+    const std::function<void(const std::string& chunk)>& onOutput);
 }  // namespace deploybutton

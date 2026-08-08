@@ -13,7 +13,7 @@ public:
     void SetUp() override;
     void TearDown() override;
 
-    static const std::string &baseUrl();
+    static const std::string& baseUrl();
 
 private:
     std::thread runner_;

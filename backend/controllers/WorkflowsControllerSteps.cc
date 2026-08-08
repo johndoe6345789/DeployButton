@@ -6,8 +6,8 @@ using namespace drogon;
 
 namespace deploybutton {
 void WorkflowsController::updateSteps(
-    const HttpRequestPtr &req,
-    std::function<void(const HttpResponsePtr &)> &&callback, long long id) {
+    const HttpRequestPtr& req,
+    std::function<void(const HttpResponsePtr&)>&& callback, long long id) {
     auto db = app().getDbClient();
     auto existing = getWorkflowWithSteps(db, id);
     if (existing.isNull()) {

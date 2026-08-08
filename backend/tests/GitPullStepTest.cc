@@ -23,7 +23,7 @@ TEST(GitPullStep, FailsWithCapturedOutputWhenNoRemoteConfigured) {
 
     std::string output;
     auto result =
-        gitPullStep(config, [&](const std::string &c) { output += c; });
+        gitPullStep(config, [&](const std::string& c) { output += c; });
 
     EXPECT_NE(result.exitCode, 0);
     EXPECT_FALSE(output.empty());
@@ -35,7 +35,7 @@ TEST(GitPullStep, FailsWhenCwdDoesNotExist) {
 
     std::string output;
     auto result =
-        gitPullStep(config, [&](const std::string &c) { output += c; });
+        gitPullStep(config, [&](const std::string& c) { output += c; });
 
     EXPECT_NE(result.exitCode, 0);
     EXPECT_FALSE(output.empty());

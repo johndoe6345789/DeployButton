@@ -13,22 +13,22 @@ inline Json::Value toJsonInt64(long long value) {
     return Json::Value(static_cast<Json::Int64>(value));
 }
 
-inline Json::Value nullableString(const drogon::orm::Field &field) {
+inline Json::Value nullableString(const drogon::orm::Field& field) {
     return field.isNull() ? Json::Value()
                           : Json::Value(field.as<std::string>());
 }
 
-inline Json::Value nullableInt(const drogon::orm::Field &field) {
+inline Json::Value nullableInt(const drogon::orm::Field& field) {
     return field.isNull() ? Json::Value() : Json::Value(field.as<int>());
 }
 
-inline std::string jsonToCompactString(const Json::Value &value) {
+inline std::string jsonToCompactString(const Json::Value& value) {
     Json::StreamWriterBuilder builder;
     builder["indentation"] = "";
     return Json::writeString(builder, value);
 }
 
-inline Json::Value parseJsonText(const std::string &text) {
+inline Json::Value parseJsonText(const std::string& text) {
     Json::CharReaderBuilder builder;
     Json::Value root;
     std::string errs;

@@ -5,8 +5,8 @@
 
 namespace deploybutton {
 StepResult httpWebhookStep(
-    const Json::Value &config,
-    const std::function<void(const std::string &)> &onOutput) {
+    const Json::Value& config,
+    const std::function<void(const std::string&)>& onOutput) {
     std::string url = configStr(config, "url");
     std::string method = configStr(config, "method", "POST");
     std::string body = configStr(config, "body");

@@ -4,7 +4,7 @@
 #include <sys/wait.h>
 
 namespace {
-std::string shellQuote(const std::string &s) {
+std::string shellQuote(const std::string& s) {
     std::string out = "'";
     for (char c : s) {
         if (c == '\'') {
@@ -20,8 +20,8 @@ std::string shellQuote(const std::string &s) {
 
 namespace deploybutton {
 CommandResult runCommand(
-    const std::string &cwd, const std::string &command,
-    const std::function<void(const std::string &)> &onOutput) {
+    const std::string& cwd, const std::string& command,
+    const std::function<void(const std::string&)>& onOutput) {
     std::string fullCommand;
     if (!cwd.empty()) {
         // The whole compound command is wrapped in one subshell before
@@ -32,7 +32,7 @@ CommandResult runCommand(
         fullCommand = "(" + command + ") 2>&1";
     }
 
-    FILE *pipe = popen(fullCommand.c_str(), "r");
+    FILE* pipe = popen(fullCommand.c_str(), "r");
     if (!pipe) {
         onOutput("Failed to start command: " + command + "\n");
         return {-1};
