@@ -1,0 +1,44 @@
+# Brings up one alternate "slot" (blue or green — whichever isn't already
+# running) of the backend+frontend pair, alongside the slot docker-compose.yml
+# started, so the blue_green_deploy workflow step can build and health-check
+# fresh code before nginx cuts traffic over to it. Mirrors the backend/
+# frontend service definitions in docker-compose.yml — keep the two in sync
+# if either changes. Joins that file's network and sqlite volume by name
+# (both slots share the one database) rather than owning them.
+#
+# Usage: SLOT=green docker compose -p deploybutton-green \
+#          -f docker-compose.app.yml up -d --build
+services:
+  backend:
+    container_name: backend-${SLOT}
+    build:
+      context: ./backend
+    environment:
+      - GIT_CONFIG_COUNT=1
+      - GIT_CONFIG_KEY_0=safe.directory
+      - GIT_CONFIG_VALUE_0=*
+    volumes:
+      - backend-data:/app/data
+      - /srv/repos:/srv/repos
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - deploybutton-net
+    restart: unless-stopped
+
+  frontend:
+    container_name: frontend-${SLOT}
+    build:
+      context: ./frontend
+    networks:
+      - deploybutton-net
+    restart: unless-stopped
+
+networks:
+  deploybutton-net:
+    external: true
+    name: deploybutton-net
+
+volumes:
+  backend-data:
+    external: true
+    name: deploybutton-backend-data

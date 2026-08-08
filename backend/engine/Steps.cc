@@ -1,6 +1,7 @@
 #include "Steps.h"
 #include "CommandSteps.h"
 #include "HttpWebhookStep.h"
+#include "SelfDeployStep.h"
 #include "StepConfig.h"
 #include <chrono>
 #include <thread>
@@ -41,6 +42,8 @@ StepResult executeStep(
     if (type == "npm_build") return npmBuildStep(config, onOutput);
     if (type == "docker_build") return dockerBuildStep(config, onOutput);
     if (type == "http_webhook") return httpWebhookStep(config, onOutput);
+    if (type == "blue_green_deploy")
+        return blueGreenDeployStep(config, onOutput);
     if (type == "delay") return delayStep(config, onOutput);
     if (type == "notify") return notifyStep(config, onOutput);
 

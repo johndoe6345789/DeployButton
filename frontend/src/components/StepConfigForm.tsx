@@ -8,6 +8,7 @@ import NpmInstallFields from "./step-fields/NpmInstallFields";
 import NpmBuildFields from "./step-fields/NpmBuildFields";
 import DockerBuildFields from "./step-fields/DockerBuildFields";
 import HttpWebhookFields from "./step-fields/HttpWebhookFields";
+import BlueGreenDeployFields from "./step-fields/BlueGreenDeployFields";
 import DelayFields from "./step-fields/DelayFields";
 import NotifyFields from "./step-fields/NotifyFields";
 
@@ -21,6 +22,7 @@ const FIELD_COMPONENTS: Record<
   npm_build: NpmBuildFields,
   docker_build: DockerBuildFields,
   http_webhook: HttpWebhookFields,
+  blue_green_deploy: BlueGreenDeployFields,
   delay: DelayFields,
   notify: NotifyFields,
 };

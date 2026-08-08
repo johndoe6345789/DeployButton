@@ -55,3 +55,13 @@ CREATE TABLE IF NOT EXISTS step_runs (
 
 CREATE INDEX IF NOT EXISTS idx_workflow_runs_project ON workflow_runs(project_id, started_at DESC);
 CREATE INDEX IF NOT EXISTS idx_step_runs_run ON step_runs(run_id, position);
+
+-- Single-row table: which slot (blue/green) nginx currently routes traffic
+-- to. Lives in the database, not process memory, because the process that
+-- flips it (running in whichever slot is active before cutover) isn't the
+-- same process the other slot starts fresh.
+CREATE TABLE IF NOT EXISTS deploy_state (
+  id          INTEGER PRIMARY KEY CHECK (id = 1),
+  active_slot TEXT NOT NULL DEFAULT 'blue'
+);
+INSERT OR IGNORE INTO deploy_state (id, active_slot) VALUES (1, 'blue');

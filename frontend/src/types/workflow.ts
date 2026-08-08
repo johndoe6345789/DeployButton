@@ -5,6 +5,7 @@ export type StepType =
   | "npm_build"
   | "docker_build"
   | "http_webhook"
+  | "blue_green_deploy"
   | "delay"
   | "notify";
 
@@ -15,6 +16,7 @@ export const STEP_TYPES: { value: StepType; label: string }[] = [
   { value: "npm_build", label: "Build (npm/yarn/pnpm)" },
   { value: "docker_build", label: "Docker build" },
   { value: "http_webhook", label: "HTTP webhook call" },
+  { value: "blue_green_deploy", label: "Blue/green self-deploy" },
   { value: "delay", label: "Delay" },
   { value: "notify", label: "Notify" },
 ];

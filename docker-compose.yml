@@ -1,5 +1,13 @@
+# Router + the initial "blue" slot. nginx is long-lived and never torn
+# down by a self-deploy -- only reloaded -- so it owns the shared network
+# and the backend's sqlite volume here. The alternate slot (built and
+# health-checked by the blue_green_deploy workflow step before nginx cuts
+# traffic over to it) is brought up separately via docker-compose.app.yml,
+# which joins these same network/volume by name. See README for the
+# one-time bootstrap sequence.
 services:
   backend:
+    container_name: backend-blue
     build:
       context: ./backend
     environment:
@@ -18,15 +26,23 @@ services:
       - /srv/repos:/srv/repos
       # Lets the docker_build step (and CapRover's own webhook, which builds
       # on the host) talk to the host's Docker daemon from inside this container.
+      # The blue_green_deploy step also uses this to build/start the other
+      # slot and to `docker exec` nginx for the cutover reload.
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - deploybutton-net
     restart: unless-stopped
 
   frontend:
+    container_name: frontend-blue
     build:
       context: ./frontend
+    networks:
+      - deploybutton-net
     restart: unless-stopped
 
   nginx:
+    container_name: nginx
     build:
       context: ./nginx
     ports:
@@ -34,7 +50,14 @@ services:
     depends_on:
       - backend
       - frontend
+    networks:
+      - deploybutton-net
     restart: unless-stopped
+
+networks:
+  deploybutton-net:
+    name: deploybutton-net
 
 volumes:
   backend-data:
+    name: deploybutton-backend-data

@@ -21,6 +21,8 @@ function defaultConfig(type: StepType): Record<string, any> {
       return { seconds: 5 };
     case "docker_build":
       return { dockerfile: "Dockerfile" };
+    case "blue_green_deploy":
+      return { healthTimeoutSeconds: 120 };
     default:
       return {};
   }
