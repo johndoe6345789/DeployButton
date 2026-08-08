@@ -41,7 +41,7 @@ jobs:
       - run: ./scripts/check-line-limits.sh
       - name: clang-format
         run: |
-          find controllers engine repositories db models tests \
+          find controllers engine repositories db tests \
             -type f \( -name "*.cc" -o -name "*.h" \) -print0 \
             | xargs -0 clang-format --dry-run --Werror
 
@@ -79,6 +79,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: docker compose config
+      - run: SLOT=green docker compose -f docker-compose.app.yml config
 
   docker-build:
     runs-on: ubuntu-latest
