@@ -14,11 +14,11 @@ void runWorkflowThread(long long workflowId, long long runId) {
     auto steps = deploybutton::getStepsForWorkflow(db, workflowId);
 
     bool failed = false;
-    for (const auto &step : steps) {
+    for (const auto& step : steps) {
         auto stepRunId = deploybutton::createStepRun(
             db, runId, step.id, step.position, step.name, step.type);
 
-        auto onOutput = [db, stepRunId](const std::string &chunk) {
+        auto onOutput = [db, stepRunId](const std::string& chunk) {
             deploybutton::appendStepOutput(db, stepRunId, chunk);
         };
 
@@ -41,7 +41,7 @@ void runWorkflowThread(long long workflowId, long long runId) {
 
 namespace deploybutton {
 long long startWorkflowRun(long long projectId, long long workflowId,
-                           const std::string &triggerType) {
+                           const std::string& triggerType) {
     auto db = app().getDbClient();
     auto runId = createRunIfNotRunning(db, projectId, workflowId, triggerType);
     if (runId < 0) {

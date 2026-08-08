@@ -4,10 +4,10 @@
 
 namespace deploybutton {
 namespace {
-const char *kTempUpstreamPath = "/tmp/deploybutton-active-upstream.conf";
+const char* kTempUpstreamPath = "/tmp/deploybutton-active-upstream.conf";
 }  // namespace
 
-bool cutOverNginx(const std::string &slot, const OutputFn &onOutput) {
+bool cutOverNginx(const std::string& slot, const OutputFn& onOutput) {
     std::ofstream out(kTempUpstreamPath);
     if (!out) {
         onOutput("Failed to write active-upstream.conf\n");
@@ -26,8 +26,8 @@ bool cutOverNginx(const std::string &slot, const OutputFn &onOutput) {
                .exitCode == 0;
 }
 
-void tearDownSlot(const std::string &cwd, const std::string &slot,
-                  bool detached, const OutputFn &onOutput) {
+void tearDownSlot(const std::string& cwd, const std::string& slot,
+                  bool detached, const OutputFn& onOutput) {
     std::string downCommand = "SLOT=" + slot +
                               " docker compose -p deploybutton-" + slot +
                               " -f docker-compose.app.yml down";

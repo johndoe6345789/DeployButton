@@ -26,8 +26,8 @@ TEST(WorkflowExecutor, SuccessfulRunMarksSuccessAndCapturesOutput) {
     ASSERT_EQ(detail["step_runs"].size(), 1u);
     auto stepRunId = detail["step_runs"][0]["id"].asInt64();
     EXPECT_EQ(detail["step_runs"][0]["output_length"].asInt64(), 12);
-    auto output = getStepOutputChunk(db, stepRunId, std::nullopt,
-                                     std::nullopt, 65536);
+    auto output =
+        getStepOutputChunk(db, stepRunId, std::nullopt, std::nullopt, 65536);
     EXPECT_EQ(output["text"].asString(), "executor-ok\n");
 }
 

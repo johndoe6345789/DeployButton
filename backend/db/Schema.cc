@@ -7,7 +7,7 @@ using namespace drogon;
 using namespace drogon::orm;
 
 namespace deploybutton {
-std::vector<std::string> splitStatements(const std::string &sql) {
+std::vector<std::string> splitStatements(const std::string& sql) {
     std::vector<std::string> statements;
     std::string current;
     for (char c : sql) {
@@ -27,7 +27,7 @@ std::vector<std::string> splitStatements(const std::string &sql) {
     return statements;
 }
 
-void applySchema(const std::string &schemaPath) {
+void applySchema(const std::string& schemaPath) {
     std::ifstream file(schemaPath);
     if (!file.is_open()) {
         LOG_ERROR << "Could not open schema file at " << schemaPath;
@@ -46,10 +46,10 @@ void applySchema(const std::string &schemaPath) {
     db->execSqlSync("PRAGMA journal_mode=WAL;");
     db->execSqlSync("PRAGMA busy_timeout=5000;");
 
-    for (auto &stmt : splitStatements(buffer.str())) {
+    for (auto& stmt : splitStatements(buffer.str())) {
         try {
             db->execSqlSync(stmt);
-        } catch (const DrogonDbException &e) {
+        } catch (const DrogonDbException& e) {
             LOG_ERROR << "Schema statement failed: " << e.base().what();
             LOG_ERROR << "Statement was: " << stmt;
         }

@@ -19,7 +19,7 @@ TEST(SeedTemplates, ReactTemplateHasFiveSteps) {
 
 TEST(SeedTemplates, BackendTemplateStepsReferenceCaproverWebhook) {
     auto templates = defaultSeedWorkflows();
-    auto &steps = templates[1].steps;
+    auto& steps = templates[1].steps;
     ASSERT_EQ(steps.size(), 4u);
     EXPECT_EQ(steps[1].type, "http_webhook");
     EXPECT_NE(steps[1].config.find("captain.example.com"), std::string::npos);

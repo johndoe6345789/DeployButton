@@ -10,8 +10,8 @@ namespace deploybutton {
 // endpoint is reachable only via Tailscale/Cloudflare Tunnel, matching the
 // project's no-application-auth decision.
 void WebhooksController::github(
-    const HttpRequestPtr &req,
-    std::function<void(const HttpResponsePtr &)> &&callback, std::string slug) {
+    const HttpRequestPtr& req,
+    std::function<void(const HttpResponsePtr&)>&& callback, std::string slug) {
     auto db = app().getDbClient();
     auto project = getProjectBySlug(db, slug);
     if (project.isNull()) {

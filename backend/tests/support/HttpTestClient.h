@@ -13,8 +13,8 @@ struct ApiResponse {
 // live listener AppTestEnvironment starts (sends Content-Type: application
 // /json, unlike the production performHttpRequest which stays header-free
 // since a workflow's own webhook target may not want that assumption).
-ApiResponse apiGet(const std::string &path);
-ApiResponse apiPost(const std::string &path, const Json::Value &body);
-ApiResponse apiPut(const std::string &path, const Json::Value &body);
-ApiResponse apiDelete(const std::string &path);
+ApiResponse apiGet(const std::string& path);
+ApiResponse apiPost(const std::string& path, const Json::Value& body);
+ApiResponse apiPut(const std::string& path, const Json::Value& body);
+ApiResponse apiDelete(const std::string& path);
 }  // namespace deploybutton::test

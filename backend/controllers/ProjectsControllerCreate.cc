@@ -6,8 +6,8 @@ using namespace drogon;
 
 namespace deploybutton {
 void ProjectsController::create(
-    const HttpRequestPtr &req,
-    std::function<void(const HttpResponsePtr &)> &&callback) {
+    const HttpRequestPtr& req,
+    std::function<void(const HttpResponsePtr&)>&& callback) {
     auto json = req->getJsonObject();
     if (!json) {
         callback(errorResponse(k400BadRequest, "Invalid JSON body"));
@@ -28,7 +28,7 @@ void ProjectsController::create(
     try {
         auto id = createProject(db, name, slug, repoUrl, workflowId);
         callback(jsonResponse(getProject(db, id), k201Created));
-    } catch (const drogon::orm::DrogonDbException &e) {
+    } catch (const drogon::orm::DrogonDbException& e) {
         callback(errorResponse(k400BadRequest, e.base().what()));
     }
 }

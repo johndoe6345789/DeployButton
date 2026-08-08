@@ -6,8 +6,8 @@ using namespace drogon;
 using namespace drogon::orm;
 
 namespace {
-long long insertWorkflow(const DbClientPtr &db,
-                         const deploybutton::SeedWorkflow &wf) {
+long long insertWorkflow(const DbClientPtr& db,
+                         const deploybutton::SeedWorkflow& wf) {
     auto result = db->execSqlSync(
         "INSERT INTO workflows (name, description, is_template) VALUES (?, ?, "
         "1)",
@@ -15,10 +15,10 @@ long long insertWorkflow(const DbClientPtr &db,
     return static_cast<long long>(result.insertId());
 }
 
-void insertSteps(const DbClientPtr &db, long long workflowId,
-                 const std::vector<deploybutton::SeedStep> &steps) {
+void insertSteps(const DbClientPtr& db, long long workflowId,
+                 const std::vector<deploybutton::SeedStep>& steps) {
     int position = 0;
-    for (const auto &step : steps) {
+    for (const auto& step : steps) {
         db->execSqlSync(
             "INSERT INTO workflow_steps (workflow_id, position, name, type, "
             "config) "
@@ -38,7 +38,7 @@ void seedDefaultWorkflows() {
         return;
     }
 
-    for (const auto &workflow : defaultSeedWorkflows()) {
+    for (const auto& workflow : defaultSeedWorkflows()) {
         auto id = insertWorkflow(db, workflow);
         insertSteps(db, id, workflow.steps);
     }

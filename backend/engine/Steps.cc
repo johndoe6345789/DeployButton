@@ -7,16 +7,16 @@
 #include <thread>
 
 namespace {
-deploybutton::StepResult delayStep(const Json::Value &config,
-                                   const deploybutton::OutputFn &onOutput) {
+deploybutton::StepResult delayStep(const Json::Value& config,
+                                   const deploybutton::OutputFn& onOutput) {
     int seconds = deploybutton::configInt(config, "seconds", 0);
     onOutput("Waiting " + std::to_string(seconds) + " seconds...\n");
     std::this_thread::sleep_for(std::chrono::seconds(seconds));
     return {0};
 }
 
-deploybutton::StepResult notifyStep(const Json::Value &config,
-                                    const deploybutton::OutputFn &onOutput) {
+deploybutton::StepResult notifyStep(const Json::Value& config,
+                                    const deploybutton::OutputFn& onOutput) {
     std::string message = deploybutton::configStr(config, "message");
     onOutput(message + "\n");
 
@@ -34,8 +34,8 @@ deploybutton::StepResult notifyStep(const Json::Value &config,
 
 namespace deploybutton {
 StepResult executeStep(
-    const std::string &type, const Json::Value &config,
-    const std::function<void(const std::string &)> &onOutput) {
+    const std::string& type, const Json::Value& config,
+    const std::function<void(const std::string&)>& onOutput) {
     if (type == "git_pull") return gitPullStep(config, onOutput);
     if (type == "shell") return shellStep(config, onOutput);
     if (type == "npm_install") return npmInstallStep(config, onOutput);

@@ -10,8 +10,8 @@ public:
                   drogon::Post);
     METHOD_LIST_END
 
-    void github(const drogon::HttpRequestPtr &req,
-                std::function<void(const drogon::HttpResponsePtr &)> &&callback,
+    void github(const drogon::HttpRequestPtr& req,
+                std::function<void(const drogon::HttpResponsePtr&)>&& callback,
                 std::string slug);
 };
 }  // namespace deploybutton

@@ -4,7 +4,7 @@
 using namespace drogon::orm;
 
 namespace {
-Json::Value rowToJson(const Row &row) {
+Json::Value rowToJson(const Row& row) {
     Json::Value obj;
     obj["id"] = deploybutton::toJsonInt64(row["id"].as<long long>());
     obj["name"] = row["name"].as<std::string>();
@@ -22,7 +22,7 @@ Json::Value rowToJson(const Row &row) {
     return obj;
 }
 
-const char *kSelectBase =
+const char* kSelectBase =
     "SELECT p.id, p.name, p.slug, p.repo_url, p.workflow_id, w.name AS "
     "workflow_name, "
     "(SELECT status FROM workflow_runs r WHERE r.project_id = p.id "
@@ -35,23 +35,23 @@ const char *kSelectBase =
 }  // namespace
 
 namespace deploybutton {
-Json::Value listProjects(const DbClientPtr &db) {
+Json::Value listProjects(const DbClientPtr& db) {
     Json::Value arr(Json::arrayValue);
     auto result =
         db->execSqlSync(std::string(kSelectBase) + "ORDER BY p.id DESC");
-    for (const auto &row : result) {
+    for (const auto& row : result) {
         arr.append(rowToJson(row));
     }
     return arr;
 }
 
-Json::Value getProject(const DbClientPtr &db, long long id) {
+Json::Value getProject(const DbClientPtr& db, long long id) {
     auto result =
         db->execSqlSync(std::string(kSelectBase) + "WHERE p.id = ?", id);
     return result.empty() ? Json::Value() : rowToJson(result[0]);
 }
 
-Json::Value getProjectBySlug(const DbClientPtr &db, const std::string &slug) {
+Json::Value getProjectBySlug(const DbClientPtr& db, const std::string& slug) {
     auto result =
         db->execSqlSync(std::string(kSelectBase) + "WHERE p.slug = ?", slug);
     return result.empty() ? Json::Value() : rowToJson(result[0]);

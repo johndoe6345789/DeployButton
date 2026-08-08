@@ -14,19 +14,18 @@ public:
                   drogon::Delete);
     METHOD_LIST_END
 
-    void list(const drogon::HttpRequestPtr &req,
-              std::function<void(const drogon::HttpResponsePtr &)> &&callback);
-    void create(
-        const drogon::HttpRequestPtr &req,
-        std::function<void(const drogon::HttpResponsePtr &)> &&callback);
-    void get(const drogon::HttpRequestPtr &req,
-             std::function<void(const drogon::HttpResponsePtr &)> &&callback,
+    void list(const drogon::HttpRequestPtr& req,
+              std::function<void(const drogon::HttpResponsePtr&)>&& callback);
+    void create(const drogon::HttpRequestPtr& req,
+                std::function<void(const drogon::HttpResponsePtr&)>&& callback);
+    void get(const drogon::HttpRequestPtr& req,
+             std::function<void(const drogon::HttpResponsePtr&)>&& callback,
              long long id);
-    void update(const drogon::HttpRequestPtr &req,
-                std::function<void(const drogon::HttpResponsePtr &)> &&callback,
+    void update(const drogon::HttpRequestPtr& req,
+                std::function<void(const drogon::HttpResponsePtr&)>&& callback,
                 long long id);
-    void remove(const drogon::HttpRequestPtr &req,
-                std::function<void(const drogon::HttpResponsePtr &)> &&callback,
+    void remove(const drogon::HttpRequestPtr& req,
+                std::function<void(const drogon::HttpResponsePtr&)>&& callback,
                 long long id);
 };
 }  // namespace deploybutton

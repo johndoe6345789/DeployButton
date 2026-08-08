@@ -4,11 +4,11 @@
 using namespace deploybutton;
 
 namespace {
-std::string captureOutput(const std::string &cwd, const std::string &cmd,
-                          int *exitCodeOut = nullptr) {
+std::string captureOutput(const std::string& cwd, const std::string& cmd,
+                          int* exitCodeOut = nullptr) {
     std::string output;
     auto result = runCommand(
-        cwd, cmd, [&](const std::string &chunk) { output += chunk; });
+        cwd, cmd, [&](const std::string& chunk) { output += chunk; });
     if (exitCodeOut) *exitCodeOut = result.exitCode;
     return output;
 }

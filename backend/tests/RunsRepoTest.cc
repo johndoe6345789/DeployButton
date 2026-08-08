@@ -34,9 +34,8 @@ TEST(RunsRepo, GetMissingReturnsNull) {
 
 TEST(RunsRepo, GetStepOutputChunkMissingStepRunReturnsNull) {
     Fixture f;
-    EXPECT_TRUE(
-        getStepOutputChunk(f.db, 999, std::nullopt, std::nullopt, 65536)
-            .isNull());
+    EXPECT_TRUE(getStepOutputChunk(f.db, 999, std::nullopt, std::nullopt, 65536)
+                    .isNull());
 }
 
 TEST(RunsRepo, FinishRunSetsStatusAndFinishedAt) {

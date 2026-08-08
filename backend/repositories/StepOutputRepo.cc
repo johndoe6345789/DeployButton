@@ -24,13 +24,12 @@ SnappedChunk snapToLineStart(std::string text, long long offset) {
 }  // namespace
 
 namespace deploybutton {
-Json::Value getStepOutputChunk(const DbClientPtr &db, long long stepRunId,
+Json::Value getStepOutputChunk(const DbClientPtr& db, long long stepRunId,
                                std::optional<long long> before,
                                std::optional<long long> after,
                                long long limit) {
     auto lenRow = db->execSqlSync(
-        "SELECT length(output) AS len FROM step_runs WHERE id = ?",
-        stepRunId);
+        "SELECT length(output) AS len FROM step_runs WHERE id = ?", stepRunId);
     if (lenRow.empty()) return Json::Value();
     const long long total = lenRow[0]["len"].as<long long>();
     if (limit <= 0) limit = 1;

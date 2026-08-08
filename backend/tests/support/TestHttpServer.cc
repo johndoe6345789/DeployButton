@@ -7,7 +7,7 @@
 namespace deploybutton::test {
 TestHttpServer::~TestHttpServer() { stop(); }
 
-int TestHttpServer::start(const std::string &responseStatusLine) {
+int TestHttpServer::start(const std::string& responseStatusLine) {
     responseStatusLine_ = responseStatusLine;
 
     listenFd_ = socket(AF_INET, SOCK_STREAM, 0);
@@ -19,11 +19,11 @@ int TestHttpServer::start(const std::string &responseStatusLine) {
     addr.sin_addr.s_addr = inet_addr("127.0.0.1");
     addr.sin_port = 0;  // let the OS pick a free port
 
-    bind(listenFd_, reinterpret_cast<sockaddr *>(&addr), sizeof(addr));
+    bind(listenFd_, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
     listen(listenFd_, 4);
 
     socklen_t len = sizeof(addr);
-    getsockname(listenFd_, reinterpret_cast<sockaddr *>(&addr), &len);
+    getsockname(listenFd_, reinterpret_cast<sockaddr*>(&addr), &len);
     int port = ntohs(addr.sin_port);
 
     running_ = true;

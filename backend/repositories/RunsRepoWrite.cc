@@ -3,8 +3,8 @@
 using namespace drogon::orm;
 
 namespace deploybutton {
-long long createRun(const DbClientPtr &db, long long projectId,
-                    long long workflowId, const std::string &triggerType) {
+long long createRun(const DbClientPtr& db, long long projectId,
+                    long long workflowId, const std::string& triggerType) {
     auto result = db->execSqlSync(
         "INSERT INTO workflow_runs (project_id, workflow_id, trigger_type, "
         "status) "
@@ -13,9 +13,9 @@ long long createRun(const DbClientPtr &db, long long projectId,
     return static_cast<long long>(result.insertId());
 }
 
-long long createRunIfNotRunning(const DbClientPtr &db, long long projectId,
+long long createRunIfNotRunning(const DbClientPtr& db, long long projectId,
                                 long long workflowId,
-                                const std::string &triggerType) {
+                                const std::string& triggerType) {
     auto result = db->execSqlSync(
         "INSERT INTO workflow_runs (project_id, workflow_id, trigger_type, "
         "status) "
@@ -29,8 +29,8 @@ long long createRunIfNotRunning(const DbClientPtr &db, long long projectId,
     return static_cast<long long>(result.insertId());
 }
 
-void finishRun(const DbClientPtr &db, long long runId,
-               const std::string &status) {
+void finishRun(const DbClientPtr& db, long long runId,
+               const std::string& status) {
     db->execSqlSync(
         "UPDATE workflow_runs SET status = ?, finished_at = datetime('now') "
         "WHERE id = ?",

@@ -9,14 +9,14 @@ void StubPath::SetUp() {
     char buf[] = "/tmp/deploybutton_stub_bin_XXXXXX";
     dir_ = mkdtemp(buf);
 
-    const char *existing = getenv("PATH");
+    const char* existing = getenv("PATH");
     oldPath_ = existing ? existing : "";
     setenv("PATH", (dir_ + ":" + oldPath_).c_str(), 1);
 }
 
 void StubPath::TearDown() { setenv("PATH", oldPath_.c_str(), 1); }
 
-void StubPath::addStub(const std::string &name) {
+void StubPath::addStub(const std::string& name) {
     std::string path = dir_ + "/" + name;
     std::ofstream out(path);
     out << "#!/bin/sh\necho STUB:" << name << " \"$@\"\nexit 0\n";

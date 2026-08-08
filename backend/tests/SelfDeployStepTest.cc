@@ -18,7 +18,7 @@ TEST(SelfDeployStep, OtherSlotToggles) {
 TEST(SelfDeployStep, MissingCwdFails) {
     std::string output;
     auto result = blueGreenDeployStep(
-        Json::Value(), [&](const std::string &c) { output += c; });
+        Json::Value(), [&](const std::string& c) { output += c; });
     EXPECT_EQ(result.exitCode, 1);
     EXPECT_NE(output.find("missing 'cwd'"), std::string::npos);
 }
@@ -33,7 +33,7 @@ TEST_F(StubPath, HappyPathFlipsActiveSlotAndSucceeds) {
     config["healthTimeoutSeconds"] = 5;
     std::string output;
     auto result =
-        blueGreenDeployStep(config, [&](const std::string &c) { output += c; });
+        blueGreenDeployStep(config, [&](const std::string& c) { output += c; });
 
     EXPECT_EQ(result.exitCode, 0);
     EXPECT_EQ(getActiveSlot(db), "green");
@@ -54,7 +54,7 @@ TEST_F(StubPath, FailedBuildLeavesActiveSlotUntouched) {
     config["cwd"] = "/tmp";
     std::string output;
     auto result =
-        blueGreenDeployStep(config, [&](const std::string &c) { output += c; });
+        blueGreenDeployStep(config, [&](const std::string& c) { output += c; });
 
     EXPECT_EQ(result.exitCode, 1);
     EXPECT_EQ(getActiveSlot(db), "blue");

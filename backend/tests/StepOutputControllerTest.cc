@@ -7,7 +7,7 @@ using namespace deploybutton::test;
 namespace {
 // Six lines of "Lx\n" (3 chars each, 18 total) -- long enough to exercise
 // tail/before/after paging with small limits and deterministic offsets.
-constexpr const char *kSixLineCommand =
+constexpr const char* kSixLineCommand =
     "printf 'L1\\nL2\\nL3\\nL4\\nL5\\nL6\\n'";
 }  // namespace
 
@@ -24,8 +24,7 @@ TEST(StepOutputController, DefaultsToFullTail) {
 }
 
 TEST(StepOutputController, TailWithLimitSnapsToLineStart) {
-    auto stepRunId =
-        runShellStepAndGetId("output-tail-limit", kSixLineCommand);
+    auto stepRunId = runShellStepAndGetId("output-tail-limit", kSixLineCommand);
 
     // Raw window for the last 5 chars is "5\nL6\n" -- snapped forward past
     // its first newline so the returned text starts on a full line.

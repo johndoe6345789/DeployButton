@@ -1,7 +1,7 @@
 #include "SeedTemplates.h"
 
 namespace {
-const char *kCaproverWebhook =
+const char* kCaproverWebhook =
     "https://captain.example.com/api/v2/user/apps/webhooks/"
     "triggerbuild?namespace=captain&token=REPLACE_ME";
 

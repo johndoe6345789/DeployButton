@@ -8,15 +8,15 @@ using namespace drogon;
 namespace {
 constexpr long long kDefaultOutputLimit = 65536;
 
-std::optional<long long> parseOptionalInt64(const HttpRequestPtr &req,
-                                            const std::string &name) {
+std::optional<long long> parseOptionalInt64(const HttpRequestPtr& req,
+                                            const std::string& name) {
     auto raw = req->getParameter(name);
     if (raw.empty()) {
         return std::nullopt;
     }
     try {
         return std::stoll(raw);
-    } catch (const std::exception &) {
+    } catch (const std::exception&) {
         return std::nullopt;
     }
 }
@@ -24,16 +24,16 @@ std::optional<long long> parseOptionalInt64(const HttpRequestPtr &req,
 
 namespace deploybutton {
 void RunsController::listForProject(
-    const HttpRequestPtr &req,
-    std::function<void(const HttpResponsePtr &)> &&callback,
+    const HttpRequestPtr& req,
+    std::function<void(const HttpResponsePtr&)>&& callback,
     long long projectId) {
     auto db = app().getDbClient();
     callback(jsonResponse(listRunsForProject(db, projectId)));
 }
 
-void RunsController::get(
-    const HttpRequestPtr &req,
-    std::function<void(const HttpResponsePtr &)> &&callback, long long runId) {
+void RunsController::get(const HttpRequestPtr& req,
+                         std::function<void(const HttpResponsePtr&)>&& callback,
+                         long long runId) {
     auto db = app().getDbClient();
     auto run = getRunDetail(db, runId);
     if (run.isNull()) {
@@ -44,8 +44,8 @@ void RunsController::get(
 }
 
 void RunsController::getStepOutput(
-    const HttpRequestPtr &req,
-    std::function<void(const HttpResponsePtr &)> &&callback,
+    const HttpRequestPtr& req,
+    std::function<void(const HttpResponsePtr&)>&& callback,
     long long stepRunId) {
     auto db = app().getDbClient();
     auto before = parseOptionalInt64(req, "before");

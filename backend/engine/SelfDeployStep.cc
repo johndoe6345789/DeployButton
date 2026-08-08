@@ -12,22 +12,22 @@ namespace {
 constexpr int kDefaultHealthTimeoutSeconds = 120;
 }  // namespace
 
-std::string otherSlot(const std::string &slot) {
+std::string otherSlot(const std::string& slot) {
     return slot == "blue" ? "green" : "blue";
 }
 
-bool buildAndStartSlot(const std::string &cwd, const std::string &slot,
-                       const OutputFn &onOutput) {
+bool buildAndStartSlot(const std::string& cwd, const std::string& slot,
+                       const OutputFn& onOutput) {
     std::string command = "SLOT=" + slot + " docker compose -p deploybutton-" +
                           slot + " -f docker-compose.app.yml up -d --build";
     return runCommand(cwd, command, onOutput).exitCode == 0;
 }
 
-bool waitForHealthy(const std::string &slot, int timeoutSeconds,
-                    const OutputFn &onOutput) {
+bool waitForHealthy(const std::string& slot, int timeoutSeconds,
+                    const OutputFn& onOutput) {
     std::string checkCommand = "docker exec backend-" + slot +
                                " curl -fsS http://localhost:8080/api/health";
-    auto quiet = [](const std::string &) {};
+    auto quiet = [](const std::string&) {};
     for (int waited = 0; waited < timeoutSeconds; waited += 2) {
         if (runCommand("", checkCommand, quiet).exitCode == 0) {
             onOutput(slot + " is healthy.\n");
@@ -39,8 +39,8 @@ bool waitForHealthy(const std::string &slot, int timeoutSeconds,
     return false;
 }
 
-StepResult blueGreenDeployStep(const Json::Value &config,
-                               const OutputFn &onOutput) {
+StepResult blueGreenDeployStep(const Json::Value& config,
+                               const OutputFn& onOutput) {
     std::string cwd = configStr(config, "cwd");
     if (cwd.empty()) {
         onOutput("blue_green_deploy step missing 'cwd'\n");

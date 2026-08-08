@@ -13,6 +13,6 @@ namespace deploybutton {
 // a runtime crash in the new code leaves the running app untouched.
 // Config: "cwd", the deploybutton repo checkout path (required).
 StepResult blueGreenDeployStep(
-    const Json::Value &config,
-    const std::function<void(const std::string &chunk)> &onOutput);
+    const Json::Value& config,
+    const std::function<void(const std::string& chunk)>& onOutput);
 }  // namespace deploybutton

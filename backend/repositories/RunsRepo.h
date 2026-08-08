@@ -6,37 +6,37 @@
 #include <string>
 
 namespace deploybutton {
-Json::Value listRunsForProject(const drogon::orm::DbClientPtr &db,
+Json::Value listRunsForProject(const drogon::orm::DbClientPtr& db,
                                long long projectId);
 
 // Returns the run plus its ordered step_runs array, or Json::nullValue if not
 // found.
-Json::Value getRunDetail(const drogon::orm::DbClientPtr &db, long long runId);
+Json::Value getRunDetail(const drogon::orm::DbClientPtr& db, long long runId);
 
-long long createRun(const drogon::orm::DbClientPtr &db, long long projectId,
-                    long long workflowId, const std::string &triggerType);
+long long createRun(const drogon::orm::DbClientPtr& db, long long projectId,
+                    long long workflowId, const std::string& triggerType);
 
 // Atomically creates a run iff no other run for this project is already
 // 'running', in one SQL statement (INSERT ... WHERE NOT EXISTS). This is the
 // run-concurrency guard: unlike an in-process lock, it's correct even when
 // two backend processes share this same database file, e.g. the old and new
 // slot during a blue/green self-deploy. Returns -1 if a run is in progress.
-long long createRunIfNotRunning(const drogon::orm::DbClientPtr &db,
+long long createRunIfNotRunning(const drogon::orm::DbClientPtr& db,
                                 long long projectId, long long workflowId,
-                                const std::string &triggerType);
+                                const std::string& triggerType);
 
-void finishRun(const drogon::orm::DbClientPtr &db, long long runId,
-               const std::string &status);
+void finishRun(const drogon::orm::DbClientPtr& db, long long runId,
+               const std::string& status);
 
-long long createStepRun(const drogon::orm::DbClientPtr &db, long long runId,
-                        long long stepId, int position, const std::string &name,
-                        const std::string &type);
+long long createStepRun(const drogon::orm::DbClientPtr& db, long long runId,
+                        long long stepId, int position, const std::string& name,
+                        const std::string& type);
 
-void appendStepOutput(const drogon::orm::DbClientPtr &db, long long stepRunId,
-                      const std::string &chunk);
+void appendStepOutput(const drogon::orm::DbClientPtr& db, long long stepRunId,
+                      const std::string& chunk);
 
-void finishStepRun(const drogon::orm::DbClientPtr &db, long long stepRunId,
-                   const std::string &status, int exitCode);
+void finishStepRun(const drogon::orm::DbClientPtr& db, long long stepRunId,
+                   const std::string& status, int exitCode);
 
 // Returns a chunk of a step's output as {text, start_offset, end_offset,
 // total_length}, where `text` spans characters [start_offset, end_offset) of
@@ -47,9 +47,8 @@ void finishStepRun(const drogon::orm::DbClientPtr &db, long long stepRunId,
 // `before`/`after`-less "tail" and "before" chunks are snapped so `text`
 // always begins at the start of a line. Returns Json::nullValue if the step
 // run doesn't exist.
-Json::Value getStepOutputChunk(const drogon::orm::DbClientPtr &db,
+Json::Value getStepOutputChunk(const drogon::orm::DbClientPtr& db,
                                long long stepRunId,
                                std::optional<long long> before,
-                               std::optional<long long> after,
-                               long long limit);
+                               std::optional<long long> after, long long limit);
 }  // namespace deploybutton

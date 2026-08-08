@@ -11,7 +11,7 @@ class StubPath : public ::testing::Test {
 protected:
     void SetUp() override;
     void TearDown() override;
-    void addStub(const std::string &name);
+    void addStub(const std::string& name);
 
     std::string dir_;
 

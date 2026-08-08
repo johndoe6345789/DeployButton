@@ -7,7 +7,7 @@ using namespace deploybutton;
 using deploybutton::test::freshTestDb;
 
 namespace {
-long long makeWorkflow(const drogon::orm::DbClientPtr &db) {
+long long makeWorkflow(const drogon::orm::DbClientPtr& db) {
     return createWorkflow(db, "W", "desc");
 }
 }  // namespace
