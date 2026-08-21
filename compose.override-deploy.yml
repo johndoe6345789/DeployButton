@@ -1,0 +1,16 @@
+# CapRover proxies this app to 172.17.0.1:8085, but compose publishes 8080,
+# which next_extra_primary-backend-1 already owns -- nginx could never bind.
+# The data volume name in the base file is also wrong: the real database lives
+# in deploybutton_backend-data.
+services:
+  nginx:
+    ports: !override
+      - "8085:80"
+  backend:
+    volumes: !override
+      - deploybutton_backend-data:/app/data
+      - /srv/repos:/srv/repos
+      - /var/run/docker.sock:/var/run/docker.sock
+volumes:
+  deploybutton_backend-data:
+    external: true
