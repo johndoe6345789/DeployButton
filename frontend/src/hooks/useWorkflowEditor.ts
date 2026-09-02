@@ -14,6 +14,7 @@ import {
 export function useWorkflowEditor(workflowId: number) {
   const tCommon = useTranslations("common");
   const tEditor = useTranslations("workflowEditor");
+  const failedToLoadMessage = tCommon("failedToLoad");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [steps, setSteps] = useState<EditableStep[]>([]);
@@ -30,9 +31,9 @@ export function useWorkflowEditor(workflowId: number) {
         setDescription(workflow.description ?? "");
         setSteps(toEditableSteps(workflow.steps));
       })
-      .catch((e) => setError(errorMessage(e, tCommon("failedToLoad"))))
+      .catch((e) => setError(errorMessage(e, failedToLoadMessage)))
       .finally(() => setLoading(false));
-  }, [workflowId]);
+  }, [workflowId, failedToLoadMessage]);
 
   function handleDragEnd(event: DragEndEvent) {
     setSteps((items) => reorderOnDragEnd(items, event));

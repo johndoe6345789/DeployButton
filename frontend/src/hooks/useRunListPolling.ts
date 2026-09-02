@@ -12,6 +12,7 @@ const POLL_INTERVAL_MS = 1500;
 // stayed stuck at "running" forever until the viewer manually reloaded.
 export function useRunListPolling(projectId: number) {
   const t = useTranslations("common");
+  const failedToLoadMessage = t("failedToLoad");
   const [runs, setRuns] = useState<WorkflowRun[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -29,7 +30,7 @@ export function useRunListPolling(projectId: number) {
         }
       } catch (e) {
         if (!cancelled) {
-          setError(e instanceof Error ? e.message : t("failedToLoad"));
+          setError(e instanceof Error ? e.message : failedToLoadMessage);
         }
       }
     }
@@ -39,7 +40,7 @@ export function useRunListPolling(projectId: number) {
       cancelled = true;
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [projectId]);
+  }, [projectId, failedToLoadMessage]);
 
   return { runs, error };
 }

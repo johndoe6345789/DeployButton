@@ -18,6 +18,7 @@ export default function RunHistory() {
   const params = useParams<{ id: string }>();
   const projectId = Number(params.id);
 
+  const failedToLoadMessage = tc("failedToLoad");
   const [project, setProject] = useState<Project | null>(null);
   const [projectError, setProjectError] = useState<string | null>(null);
   const { runs, error: runsError } = useRunListPolling(projectId);
@@ -27,9 +28,9 @@ export default function RunHistory() {
       .getProject(projectId)
       .then(setProject)
       .catch((e) =>
-        setProjectError(e instanceof Error ? e.message : tc("failedToLoad")),
+        setProjectError(e instanceof Error ? e.message : failedToLoadMessage),
       );
-  }, [projectId]);
+  }, [projectId, failedToLoadMessage]);
 
   const error = projectError ?? runsError;
   const loading = runs === null && error === null;

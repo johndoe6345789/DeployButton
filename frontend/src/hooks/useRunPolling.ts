@@ -9,6 +9,7 @@ const POLL_INTERVAL_MS = 1500;
 
 export function useRunPolling(runId: number) {
   const t = useTranslations("common");
+  const failedToLoadMessage = t("failedToLoad");
   const [run, setRun] = useState<RunDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -26,7 +27,7 @@ export function useRunPolling(runId: number) {
         }
       } catch (e) {
         if (!cancelled) {
-          setError(e instanceof Error ? e.message : t("failedToLoad"));
+          setError(e instanceof Error ? e.message : failedToLoadMessage);
         }
       }
     }
@@ -36,7 +37,7 @@ export function useRunPolling(runId: number) {
       cancelled = true;
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [runId]);
+  }, [runId, failedToLoadMessage]);
 
   return { run, error };
 }
