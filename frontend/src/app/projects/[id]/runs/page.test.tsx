@@ -81,4 +81,18 @@ describe("RunHistory page", () => {
     renderWithProviders(<RunHistory />);
     expect(await screen.findByText("GitHub webhook")).toBeInTheDocument();
   });
+
+  it("updates a running row's status pill without a manual reload", async () => {
+    (api.getProject as jest.Mock).mockResolvedValue(project);
+    (api.listRuns as jest.Mock)
+      .mockResolvedValueOnce([{ ...run, status: "running" }])
+      .mockResolvedValueOnce([{ ...run, status: "success" }]);
+    renderWithProviders(<RunHistory />);
+
+    expect(await screen.findByText("Running")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Success", {}, { timeout: 3000 }),
+    ).toBeInTheDocument();
+    expect(api.listRuns).toHaveBeenCalledTimes(2);
+  });
 });

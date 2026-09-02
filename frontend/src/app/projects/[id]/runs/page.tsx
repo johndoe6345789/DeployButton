@@ -5,7 +5,8 @@ import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Typography from "@mui/material/Typography";
 import { api } from "@/api/client";
-import type { Project, WorkflowRun } from "@/types";
+import type { Project } from "@/types";
+import { useRunListPolling } from "@/hooks/useRunListPolling";
 import PageContainer from "@/components/PageContainer";
 import RunHistoryHeader from "@/components/RunHistoryHeader";
 import RunHistoryRow from "@/components/RunHistoryRow";
@@ -18,21 +19,20 @@ export default function RunHistory() {
   const projectId = Number(params.id);
 
   const [project, setProject] = useState<Project | null>(null);
-  const [runs, setRuns] = useState<WorkflowRun[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [projectError, setProjectError] = useState<string | null>(null);
+  const { runs, error: runsError } = useRunListPolling(projectId);
 
   useEffect(() => {
-    Promise.all([api.getProject(projectId), api.listRuns(projectId)])
-      .then(([p, r]) => {
-        setProject(p);
-        setRuns(r);
-      })
+    api
+      .getProject(projectId)
+      .then(setProject)
       .catch((e) =>
-        setError(e instanceof Error ? e.message : tc("failedToLoad")),
-      )
-      .finally(() => setLoading(false));
+        setProjectError(e instanceof Error ? e.message : tc("failedToLoad")),
+      );
   }, [projectId]);
+
+  const error = projectError ?? runsError;
+  const loading = runs === null && error === null;
 
   return (
     <PageContainer>
@@ -57,7 +57,7 @@ export default function RunHistory() {
           {error}
         </Typography>
       )}
-      {!loading && runs.length === 0 && !error && (
+      {runs?.length === 0 && !error && (
         <Typography
           variant="body2"
           color="text.secondary"
@@ -68,9 +68,7 @@ export default function RunHistory() {
       )}
 
       <div className={styles.runs} data-testid="run-history-list">
-        {runs.map((run) => (
-          <RunHistoryRow key={run.id} run={run} />
-        ))}
+        {runs?.map((run) => <RunHistoryRow key={run.id} run={run} />)}
       </div>
     </PageContainer>
   );
