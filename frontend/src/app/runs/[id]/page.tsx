@@ -8,6 +8,7 @@ import PageContainer from "@/components/PageContainer";
 import RunStepItem from "@/components/RunStepItem";
 import StatusBadge from "@/components/StatusBadge";
 import { useRunPolling } from "@/hooks/useRunPolling";
+import { useAutoScrollToBottom } from "@/hooks/useAutoScrollToBottom";
 import styles from "./page.module.scss";
 
 export default function RunDetailPage() {
@@ -16,6 +17,7 @@ export default function RunDetailPage() {
   const params = useParams<{ id: string }>();
   const runId = Number(params.id);
   const { run, error } = useRunPolling(runId);
+  useAutoScrollToBottom(run, run?.status === "running");
 
   return (
     <PageContainer>

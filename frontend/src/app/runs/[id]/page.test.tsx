@@ -71,4 +71,25 @@ describe("RunDetailPage", () => {
     renderWithProviders(<RunDetailPage />);
     expect(await screen.findByText("down")).toBeInTheDocument();
   });
+
+  it("follows the bottom of the page while the run is still going", async () => {
+    const scrollTo = jest.fn();
+    window.scrollTo = scrollTo;
+    (api.getRun as jest.Mock).mockResolvedValue({
+      ...runDetail,
+      status: "running",
+    });
+    renderWithProviders(<RunDetailPage />);
+    await screen.findByText("Pull");
+    expect(scrollTo).toHaveBeenCalled();
+  });
+
+  it("does not auto-scroll once the run has already finished", async () => {
+    const scrollTo = jest.fn();
+    window.scrollTo = scrollTo;
+    (api.getRun as jest.Mock).mockResolvedValue(runDetail);
+    renderWithProviders(<RunDetailPage />);
+    await screen.findByText("Pull");
+    expect(scrollTo).not.toHaveBeenCalled();
+  });
 });
